@@ -145,13 +145,13 @@ function FlowersAndTrees() {
   const stemRef = useRef();
   const treeRef = useRef();
 
-  // Change treeline color to grass green
+  // Change treeline color to blue (matching the image)
   useEffect(() => {
     if (treelineScene) {
       treelineScene.traverse((node) => {
         if (node.isMesh && node.material) {
           node.material = node.material.clone();
-          node.material.color.set(new THREE.Color(0x4CAF50)); // Natural grass green
+          node.material.color.set(new THREE.Color(0x5B7FDF)); // Blue color from image
         }
       });
     }
@@ -242,24 +242,18 @@ function FlowersAndTrees() {
 
 // Random people
 function RandomPeople() {
-  const shirtPalette = [0xFA6D6D, 0xffffff];
-  const skinPalette = [0x8d5524, 0xc68642, 0xe0ac69, 0xf1c27d, 0xffdbac];
-
-  // Generate people positions once and keep them static
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const people = React.useMemo(() => {
-    const peopleArray = [];
-    for (let i = 0; i < 8; i++) {
-      peopleArray.push({
-        key: i,
-        position: [-9 + Math.random() * 4, -0.01, 3.5 + Math.random() * 4],
-        rotation: [0, Math.random() * Math.PI * 2, 0],
-        shirtColor: shirtPalette[Math.floor(Math.random() * shirtPalette.length)],
-        skinColor: skinPalette[Math.floor(Math.random() * skinPalette.length)]
-      });
-    }
-    return peopleArray;
-  }, []); // Empty deps = only run once on mount
+  // Fixed static positions - people facing the stage at [6, 0, -7]
+  // Positioned on the left side, facing right/forward toward the stage
+  const people = [
+    { key: 0, position: [-8.5, -0.01, -3.0], rotation: [0, -0.5, 0], shirtColor: 0xFA6D6D, skinColor: 0x8d5524 },
+    { key: 1, position: [-7.0, -0.01, -2.5], rotation: [0, -0.3, 0], shirtColor: 0xffffff, skinColor: 0xc68642 },
+    { key: 2, position: [-9.0, -0.01, -4.0], rotation: [0, -0.6, 0], shirtColor: 0xFA6D6D, skinColor: 0xe0ac69 },
+    { key: 3, position: [-6.5, -0.01, -3.5], rotation: [0, -0.2, 0], shirtColor: 0xffffff, skinColor: 0xf1c27d },
+    { key: 4, position: [-8.0, -0.01, -5.0], rotation: [0, -0.4, 0], shirtColor: 0xFA6D6D, skinColor: 0xffdbac },
+    { key: 5, position: [-7.5, -0.01, -4.5], rotation: [0, -0.35, 0], shirtColor: 0xffffff, skinColor: 0x8d5524 },
+    { key: 6, position: [-9.2, -0.01, -2.8], rotation: [0, -0.55, 0], shirtColor: 0xFA6D6D, skinColor: 0xc68642 },
+    { key: 7, position: [-6.8, -0.01, -5.2], rotation: [0, -0.25, 0], shirtColor: 0xffffff, skinColor: 0xe0ac69 }
+  ];
 
   return (
     <>
@@ -479,7 +473,7 @@ function Scene3D({ darkMode, started, setLoadingProgress }) {
 
   const bgGradient = darkMode 
     ? 'linear-gradient(0deg, hsl(220, 50%,20%) 50%, hsl(220,80%,5%) 100%)'
-    : 'linear-gradient(0deg, hsl(200, 50%,100%) 50%, hsl(214,80%,70%) 100%)';
+    : 'linear-gradient(0deg, hsl(210, 70%,65%) 50%, hsl(214,80%,70%) 100%)'; // Blue sea gradient
 
   return (
     <div style={{ 

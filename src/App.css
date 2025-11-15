@@ -412,12 +412,19 @@ input:checked ~ #sun {
     height: 100%;
     width: 100%;
     top: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
     background-color: black;
     color: white;
     position: fixed; 
     z-index: 999; 
     display: none;
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.modal::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 .modal.show {
@@ -448,6 +455,78 @@ input:checked ~ #sun {
     flex-direction: column;
     row-gap: 80px;
     justify-content: space-between;
+}
+
+/* Project Live Link Styles */
+.project-live-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 32px;
+    margin: -20px 0 20px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid rgba(102, 126, 234, 0.5);
+    border-radius: 50px;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 8px 30px rgba(102, 126, 234, 0.4),
+        inset 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.project-live-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.project-live-link:hover::before {
+    left: 100%;
+}
+
+.project-live-link:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 
+        0 15px 45px rgba(102, 126, 234, 0.6),
+        0 0 25px rgba(138, 43, 226, 0.7),
+        inset 0 0 20px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.link-icon {
+    font-size: 20px;
+    animation: rocket-float 2s ease-in-out infinite;
+}
+
+@keyframes rocket-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-3px) rotate(3deg); }
+}
+
+.link-text {
+    font-size: 16px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.link-arrow {
+    font-size: 20px;
+    font-weight: 900;
+    transition: transform 0.3s ease;
+}
+
+.project-live-link:hover .link-arrow {
+    transform: translateX(5px);
 }
 
 .project-img {

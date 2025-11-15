@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Scene3D from './components/Scene3D';
 import LoadingScreen from './components/LoadingScreen';
@@ -6,6 +7,8 @@ import Menu from './components/Menu';
 import DarkModeToggle from './components/DarkModeToggle';
 import Popups from './components/Popups';
 import Modals from './components/Modals';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -42,31 +45,42 @@ function App() {
   };
 
   return (
-    <div className="App">
-      {loading && (
-        <LoadingScreen 
-          progress={loadingProgress}
-          onStart={handleStartClick}
-          showButton={loadingProgress >= 100}
-        />
-      )}
-      
-      <div id="logo" style={{ color: darkMode ? '#ffffff' : 'inherit' }}>AKASH S<br/>WORLD</div>
-      
-      <Menu darkMode={darkMode} />
-      
-      <DarkModeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
-      
-      <Scene3D 
-        darkMode={darkMode} 
-        started={started}
-        setLoadingProgress={setLoadingProgress}
-      />
-      
-      <Popups projects={projects} darkMode={darkMode} />
-      
-      <Modals projects={projects} />
-    </div>
+    <Router>
+      <div className="App">
+        <div id="logo" style={{ color: darkMode ? '#ffffff' : 'inherit' }}>AKASH S<br/>WORLD</div>
+        
+        <Menu darkMode={darkMode} />
+        
+        <DarkModeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+        
+        <Routes>
+          <Route path="/" element={
+            <>
+              {loading && (
+                <LoadingScreen 
+                  progress={loadingProgress}
+                  onStart={handleStartClick}
+                  showButton={loadingProgress >= 100}
+                />
+              )}
+              
+              <Scene3D 
+                darkMode={darkMode} 
+                started={started}
+                setLoadingProgress={setLoadingProgress}
+              />
+              
+              <Popups projects={projects} darkMode={darkMode} />
+              
+              <Modals projects={projects} />
+            </>
+          } />
+          
+          <Route path="/about" element={<About darkMode={darkMode} />} />
+          <Route path="/contact" element={<Contact darkMode={darkMode} />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

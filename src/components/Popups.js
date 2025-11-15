@@ -8,20 +8,64 @@ function Popups({ projects, darkMode }) {
     window.updateCyclePos = (pos) => setCyclePos(pos);
   }, []);
 
-  const popupContent = [
-  { type: 'sign', text: "Ever since I was a kid, I’ve loved cartoons like Shinchan and Doraemon — they taught me how imagination can create entire worlds." },
-  { type: 'sign', text: "That same spark led me to explore technology, where I could turn ideas into something real through code and design." },
+  // 5 AI Projects to display in the world
+  const myProjects = [
+    {
+      title: 'Druva – AI Intelligent Dev Companion',
+      subtitle: 'AI assistant for code explanation and productivity.',
+      thumbnail: '/images/druva-thumb.jpg',
+      herobanner: '/images/druva-hero.jpg'
+    },
+    {
+      title: 'SOCA – AI Smart Optimized Code Auditor',
+      subtitle: 'AI-powered code reviews that boost clarity and quality.',
+      thumbnail: '/images/soca-thumb.jpg',
+      herobanner: '/images/soca-hero.jpg'
+    },
+    {
+      title: 'MediBot – AI Medical Diagnosis System',
+      subtitle: 'Smart AI assistant for quick symptom checks and health insights.',
+      thumbnail: '/images/medibot-thumb.jpg',
+      herobanner: '/images/medibot-hero.jpg'
+    },
+    {
+      title: 'Crezia – AI Text-to Image Generator',
+      subtitle: 'Create stunning images instantly from simple text prompts.',
+      thumbnail: '/images/crezia-thumb.jpg',
+      herobanner: '/images/crezia-hero.jpg'
+    },
+    {
+      title: 'Truva – AI Customer Support Copilot',
+      subtitle: 'Adaptive AI chat support that elevates customer experience.',
+      thumbnail: '/images/truva-thumb.jpg',
+      herobanner: '/images/truva-hero.jpg'
+    }
+  ];
+
+ const popupContent = [
+  { type: 'sign', text: "I build AI experiences that are fast, meaningful, and human-focused." },
   { type: 'project', index: 0 },
-  { type: 'sign', text: "During my engineering journey in Bangalore, I started building AI projects that mix creativity, logic, and purpose." },
+
+  { type: 'sign', text: "Every project teaches me how to turn ideas into intelligent products." },
   { type: 'project', index: 1 },
-  { type: 'sign', text: "Working on different internships helped me see how AI can solve real-world problems and make life easier for people." },
+
+  { type: 'sign', text: "I love creating systems that solve problems with clarity and precision." },
   { type: 'project', index: 2 },
+
+  { type: 'sign', text: "Innovation drives me — from design to deployment." },
   { type: 'project', index: 3 },
-  { type: 'sign', text: "Now I'm focused on designing intelligent, human-centered systems — with the same curiosity I had watching cartoons." }
+
+  { type: 'sign', text: "My goal is simple: build AI that feels powerful, seamless, and useful." },
+  { type: 'project', index: 4 },
+  
+  { type: 'sign', text: "Thanks for exploring my world! Feel free to reach out and connect." }
 ];
 
+
+
   const isVisible = (index) => {
-    return cyclePos >= 0.025 + index/popupContent.length && cyclePos < 0.08 + index/popupContent.length;
+    const totalItems = popupContent.length + 1; // +1 for initial instructions
+    return cyclePos >= 0.025 + index/totalItems && cyclePos < 0.08 + index/totalItems;
   };
 
   return (
@@ -45,10 +89,10 @@ function Popups({ projects, darkMode }) {
               </p2>
             </div>
           );
-        } else if (popup.type === 'project' && projects[popup.index]) {
-          const project = projects[popup.index];
-          const imageUrl = project.thumbnail ? 
-            `https://cdn.sanity.io/images/jidqpryp/production/${project.thumbnail.asset._ref.substring(6, project.thumbnail.asset._ref.length-4)}.jpg` : '';
+        } else if (popup.type === 'project') {
+          // Use custom projects or fallback to Sanity projects
+          const project = myProjects[popup.index] || (projects[popup.index] || {});
+          const imageUrl = project.thumbnail || '';
           
           return (
             <div key={index} className={`popup project ${isVisible(index + 1) ? 'visible' : 'hidden'}`}>
@@ -60,7 +104,7 @@ function Popups({ projects, darkMode }) {
                 </div>
               </div>
               <button className="button primary" onClick={() => window.openModal(popup.index)}>
-                View {popup.index < 2 ? (popup.index === 0 ? 'Bachelor' : 'Master') + ' Thesis' : 'project'} <i className="fa-solid fa-arrow-right"></i>
+                View Project <i className="fa-solid fa-arrow-right"></i>
               </button>
             </div>
           );
