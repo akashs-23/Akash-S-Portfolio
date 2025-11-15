@@ -683,7 +683,18 @@
   }
 
   .back-to-world-button {
-    padding: 1rem 2rem;
-    font-size: 1rem;
+    padding: 0.9rem 1.8rem;
+    font-size: 0.95rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .contact-back-section {
+    margin-top: 3rem;
+    padding: 0 1rem;
+  }
+
+  .footer-credits-space {
+    font-size: 0.85rem;
   }
 }
