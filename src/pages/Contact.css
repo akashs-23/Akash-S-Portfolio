@@ -508,13 +508,15 @@
 /* Back Button */
 .contact-back-section {
   text-align: center;
-  margin-top: 4rem;
-  margin-bottom: 3rem;
-  padding: 2rem 0;
+  margin-top: 5rem;
+  margin-bottom: 4rem;
+  padding: 3rem 2rem;
   animation: fadeInUp 1.2s ease-out;
   position: relative;
-  z-index: 10;
+  z-index: 100;
   clear: both;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(138, 43, 226, 0.2);
 }
 
 .back-to-world-button {
@@ -522,21 +524,22 @@
   align-items: center;
   gap: 0.8rem;
   padding: 1.2rem 2.5rem;
-  background: rgba(138, 43, 226, 0.15);
-  border: 2px solid rgba(138, 43, 226, 0.3);
+  background: rgba(138, 43, 226, 0.25);
+  border: 2px solid rgba(138, 43, 226, 0.5);
   border-radius: 50px;
-  color: #c084fc;
+  color: #fff;
   text-decoration: none;
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(138, 43, 226, 0.3);
 }
 
 .back-to-world-button:hover {
-  background: rgba(138, 43, 226, 0.25);
-  border-color: rgba(138, 43, 226, 0.5);
+  background: rgba(138, 43, 226, 0.4);
+  border-color: rgba(138, 43, 226, 0.7);
   transform: translateX(-5px);
-  box-shadow: 0 8px 30px rgba(138, 43, 226, 0.4);
+  box-shadow: 0 8px 30px rgba(138, 43, 226, 0.5);
 }
 
 .back-to-world-button i {
@@ -683,15 +686,17 @@
   }
 
   .back-to-world-button {
-    padding: 0.9rem 1.8rem;
-    font-size: 0.95rem;
-    margin-top: 3rem;
-    margin-bottom: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    width: auto;
+    max-width: 90%;
   }
 
   .contact-back-section {
-    margin-top: 3rem;
-    padding: 0 1rem;
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+    padding: 2.5rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
   }
 
   .footer-credits-space {

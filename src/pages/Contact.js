@@ -271,7 +271,7 @@ function Contact({ darkMode }) {
                 Quick Actions
               </h2>
               <div className="actions-grid">
-                <a href="/resume section/AKASH S NEW.pdf" download className="action-button-space resume-action">
+                <a href="/resume section/AKASH S [2025].pdf" download className="action-button-space resume-action">
                   <i className="fas fa-file-download"></i>
                   <span>Download Resume</span>
                 </a>
