@@ -12,12 +12,6 @@ function Contact({ darkMode }) {
     window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  const openEmail = () => {
-    // Opens Gmail compose in a new tab (works for everyone)
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=Hello%20Akash!`;
-    window.open(gmailUrl, '_blank');
-  };
-
   return (
     <div className={`contact-space-wrapper ${darkMode ? 'dark' : ''}`}>
       {/* Animated Space Background */}
