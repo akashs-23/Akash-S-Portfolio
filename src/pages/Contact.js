@@ -1,77 +1,21 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import './Contact.css';
 
 function Contact({ darkMode }) {
-  const formRef = useRef();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
+  const whatsappNumber = '919880528258';
+  const email = 'akashsofficial62@gmail.com';
+  const phone = '+919880528258';
 
-  const [formStatus, setFormStatus] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const openWhatsApp = () => {
+    const message = "Hey Akash! 👋 I'd like to connect with you.";
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFormStatus('sending');
-    setErrorMessage('');
-    
-    // Use FormSubmit.co - a free form backend service
-    // This will send the form data to your email without any setup
-    const formData = new FormData(formRef.current);
-    
-    fetch('https://formsubmit.co/ajax/akashsofficial62@gmail.com', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        name: formRef.current.name.value,
-        email: formRef.current.email.value,
-        subject: formRef.current.subject.value,
-        message: formRef.current.message.value
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success === 'true' || data.success === true) {
-        setFormStatus('success');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-        
-        setTimeout(() => {
-          setFormStatus('');
-        }, 5000);
-      } else {
-        throw new Error('Failed to send');
-      }
-    })
-    .catch((error) => {
-      console.error('FormSubmit failed, using mailto fallback:', error);
-      
-      // Fallback to mailto if FormSubmit fails
-      const mailtoLink = `mailto:akashsofficial62@gmail.com?subject=${encodeURIComponent(formRef.current.subject.value)}&body=${encodeURIComponent(
-        `Name: ${formRef.current.name.value}\nEmail: ${formRef.current.email.value}\n\nMessage:\n${formRef.current.message.value}`
-      )}`;
-      
-      window.location.href = mailtoLink;
-      
-      setFormStatus('success');
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      
-      setTimeout(() => {
-        setFormStatus('');
-      }, 5000);
-    });
+  const openEmail = () => {
+    // Opens Gmail compose in a new tab (works for everyone)
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=Hello%20Akash!`;
+    window.open(gmailUrl, '_blank');
   };
 
   return (
@@ -84,208 +28,109 @@ function Contact({ darkMode }) {
         {/* Header */}
         <section className="contact-space-header">
           <h1 className="contact-space-title">Let's Connect</h1>
-          <p className="contact-space-subtitle">Have an idea? Let's make it happen together in the digital cosmos</p>
+          <p className="contact-space-subtitle">Pick your preferred way to reach out — I'm just one click away!</p>
         </section>
 
-        <div className="contact-content-grid">
-          {/* Contact Form */}
-          <section className="contact-form-galaxy">
-            <div className="form-card-glow"></div>
-            <h2 className="form-section-title">
-              <i className="fas fa-rocket"></i>
-              Launch Your Message
-            </h2>
-            <form ref={formRef} onSubmit={handleSubmit} className="contact-form-space">
-              <div className="form-group-space">
-                <label htmlFor="name">
-                  <i className="fas fa-user"></i>
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="Akash S"
-                />
-              </div>
-
-              <div className="form-group-space">
-                <label htmlFor="email">
-                  <i className="fas fa-envelope"></i>
-                  Your Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="akashsofficial62@gmail.com"
-                />
-              </div>
-
-              <div className="form-group-space">
-                <label htmlFor="subject">
-                  <i className="fas fa-tag"></i>
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  placeholder="Project Collaboration"
-                />
-              </div>
-
-              <div className="form-group-space">
-                <label htmlFor="message">
-                  <i className="fas fa-comment-dots"></i>
-                  Your Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows="6"
-                  placeholder="Tell me about your vision, project, or just say hello..."
-                ></textarea>
-              </div>
-
-              <button type="submit" className="submit-button-space" disabled={formStatus === 'sending'}>
-                {formStatus === 'sending' ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin"></i> Sending to Space...
-                  </>
-                ) : formStatus === 'success' ? (
-                  <>
-                    <i className="fas fa-check-circle"></i> Message Delivered!
-                  </>
-                ) : (
-                  <>
-                    <i className="fas fa-paper-plane"></i> Send Message
-                  </>
-                )}
-              </button>
-
-              {formStatus === 'success' && (
-                <div className="success-message-space">
-                  <i className="fas fa-check-circle"></i>
-                  Your message has been sent successfully! I'll get back to you soon.
-                </div>
-              )}
-              
-              {formStatus === 'error' && (
-                <div className="error-message-space">
-                  <i className="fas fa-exclamation-circle"></i>
-                  {errorMessage}
-                </div>
-              )}
-            </form>
-          </section>
-
-          {/* Contact Info & Social */}
-          <section className="contact-info-constellation">
-            {/* Contact Info Card */}
-            <div className="info-planet-card">
-              <div className="planet-glow-effect"></div>
-              <h2 className="info-section-title">
-                <i className="fas fa-address-card"></i>
-                Contact Details
-              </h2>
-              
-              <div className="info-item-space">
-                <div className="info-icon">
-                  <i className="fas fa-envelope"></i>
-                </div>
-                <div className="info-content">
-                  <h3>Email</h3>
-                  <a href="mailto:akashsofficial62@gmail.com">akashsofficial62@gmail.com</a>
-                </div>
-              </div>
-
-              <div className="info-item-space">
-                <div className="info-icon">
-                  <i className="fas fa-phone-alt"></i>
-                </div>
-                <div className="info-content">
-                  <h3>Phone</h3>
-                  <a href="tel:+919880528258">+91-9880528258</a>
-                </div>
-              </div>
-
-              <div className="info-item-space">
-                <div className="info-icon">
-                  <i className="fas fa-map-marker-alt"></i>
-                </div>
-                <div className="info-content">
-                  <h3>Location</h3>
-                  <p>Bangalore, India</p>
-                </div>
-              </div>
+        {/* Main Contact Options */}
+        <div className="contact-quick-actions">
+          {/* WhatsApp - Primary CTA */}
+          <button onClick={openWhatsApp} className="contact-primary-btn whatsapp-btn">
+            <div className="btn-icon">
+              <i className="fab fa-whatsapp"></i>
             </div>
-
-            {/* Social Media Card */}
-            <div className="social-planet-card">
-              <div className="planet-glow-effect"></div>
-              <h2 className="info-section-title">
-                <i className="fas fa-share-alt"></i>
-                Social Universe
-              </h2>
-              <div className="social-links-grid">
-                <a href="https://github.com/Akash-62" target="_blank" rel="noopener noreferrer" className="social-link-space github-link">
-                  <i className="fab fa-github"></i>
-                  <span>GitHub</span>
-                </a>
-                
-                <a href="https://linkedin.com/in/akash-s62" target="_blank" rel="noopener noreferrer" className="social-link-space linkedin-link">
-                  <i className="fab fa-linkedin"></i>
-                  <span>LinkedIn</span>
-                </a>
-                
-                <a href="hhttps://x.com/Akash_Dachu_?t=k0HtwfP4CvKHQDpu1OpEjg&s=09" target="_blank" rel="noopener noreferrer" className="social-link-space twitter-link">
-                  <i className="fab fa-twitter"></i>
-                  <span>Twitter</span>
-                </a>
-                
-                <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=8ccsjqt" target="_blank" rel="noopener noreferrer" className="social-link-space instagram-link">
-                  <i className="fab fa-instagram"></i>
-                  <span>Instagram</span>
-                </a>
-              </div>
+            <div className="btn-content">
+              <span className="btn-title">Chat on WhatsApp</span>
+              <span className="btn-subtitle">Quick & Easy — Let's Talk!</span>
             </div>
+            <i className="fas fa-arrow-right btn-arrow"></i>
+          </button>
 
-            {/* Quick Actions Card */}
-            <div className="actions-planet-card">
-              <div className="planet-glow-effect"></div>
-              <h2 className="info-section-title">
-                <i className="fas fa-bolt"></i>
-                Quick Actions
-              </h2>
-              <div className="actions-grid">
-                <a href="/resume section/AKASH S [2025].pdf" download className="action-button-space resume-action">
-                  <i className="fas fa-file-download"></i>
-                  <span>Download Resume</span>
-                </a>
-              </div>
+          {/* Email */}
+          <a 
+            href={`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=Hello%20Akash!`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-primary-btn email-btn"
+          >
+            <div className="btn-icon">
+              <i className="fas fa-envelope"></i>
             </div>
-          </section>
+            <div className="btn-content">
+              <span className="btn-title">Send an Email</span>
+              <span className="btn-subtitle">{email}</span>
+            </div>
+            <i className="fas fa-arrow-right btn-arrow"></i>
+          </a>
+
+          {/* Call */}
+          <a href={`tel:${phone}`} className="contact-primary-btn call-btn">
+            <div className="btn-icon">
+              <i className="fas fa-phone-alt"></i>
+            </div>
+            <div className="btn-content">
+              <span className="btn-title">Give me a Call</span>
+              <span className="btn-subtitle">+91-9880528258</span>
+            </div>
+            <i className="fas fa-arrow-right btn-arrow"></i>
+          </a>
+        </div>
+
+        {/* Location Badge */}
+        <div className="location-badge">
+          <i className="fas fa-map-marker-alt"></i>
+          <span>Based in Bangalore, India</span>
+        </div>
+
+        {/* Social & Resume Section */}
+        <div className="contact-secondary-grid">
+          {/* Social Media */}
+          <div className="social-section">
+            <h3 className="section-label">
+              <i className="fas fa-globe"></i>
+              Find me online
+            </h3>
+            <div className="social-links-row">
+              <a href="https://github.com/Akash-62" target="_blank" rel="noopener noreferrer" className="social-icon-btn github">
+                <i className="fab fa-github"></i>
+              </a>
+              <a href="https://linkedin.com/in/akash-s62" target="_blank" rel="noopener noreferrer" className="social-icon-btn linkedin">
+                <i className="fab fa-linkedin-in"></i>
+              </a>
+              <a href="https://x.com/Akash_Dachu_" target="_blank" rel="noopener noreferrer" className="social-icon-btn twitter">
+                <i className="fab fa-twitter"></i>
+              </a>
+              <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=8ccsjqt" target="_blank" rel="noopener noreferrer" className="social-icon-btn instagram">
+                <i className="fab fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+
+          {/* Resume Download */}
+          <div className="resume-section">
+            <h3 className="section-label">
+              <i className="fas fa-file-alt"></i>
+              Want my resume?
+            </h3>
+            <a href="/resume section/AKASH S [2025].pdf" download className="resume-download-btn">
+              <i className="fas fa-download"></i>
+              <span>Download Resume</span>
+            </a>
+          </div>
         </div>
 
         {/* Back Button */}
         <section className="contact-back-section">
-          <a href="/" className="back-to-world-button">
-            <i className="fas fa-arrow-left"></i>
-            <span>Return to Main World</span>
-          </a>
+          <Link to="/" className="back-to-world-button">
+            <span className="btn-bg"></span>
+            <span className="btn-glow"></span>
+            <span className="btn-particles">
+              <span></span><span></span><span></span><span></span><span></span>
+            </span>
+            <span className="btn-inner">
+              <i className="fas fa-rocket"></i>
+              <span>Return to Main World</span>
+            </span>
+          </Link>
         </section>
       </div>
     </div>

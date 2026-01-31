@@ -32,3 +32,52 @@
   object-fit: cover;
   pointer-events: none;
 }
+
+/* Skill Card Styles */
+.card.skill-card {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-width: 3px;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 30px currentColor;
+}
+
+.card.skill-card:hover {
+  transform: scale(1.2) !important;
+  box-shadow: 
+    0 8px 40px rgba(0, 0, 0, 0.4),
+    0 0 50px currentColor;
+}
+
+.skill-icon-bounce {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+}
+
+.skill-label-bounce {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-12deg) scale(0.8);
+  background: #1a1a2e;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+.skill-label-bounce.visible {
+  opacity: 1;
+  transform: translateX(-50%) rotate(-12deg) scale(1);
+}

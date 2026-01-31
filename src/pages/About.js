@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
+import LogoLoop from '../components/LogoLoop';
 import './About.css';
 
 function About({ darkMode }) {
@@ -26,6 +27,9 @@ function About({ darkMode }) {
       const starsContainer = document.querySelector('.stars-container');
       if (!starsContainer) return;
       
+      // Clear existing stars first
+      starsContainer.innerHTML = '';
+      
       for (let i = 0; i < 200; i++) {
         const star = document.createElement('div');
         star.className = 'star';
@@ -38,14 +42,16 @@ function About({ darkMode }) {
     };
     
     createStars();
-    
-    // Image carousel auto-slide
+  }, []);
+
+  // Separate useEffect for image carousel to prevent dependency issues
+  useEffect(() => {
     const imageInterval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % avatarImages.length);
-    }, 3000); // Change image every 3 seconds
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % 3);
+    }, 3000);
     
     return () => clearInterval(imageInterval);
-  }, [avatarImages.length]);
+  }, []);
 
   const projects = [
     {
@@ -110,17 +116,28 @@ function About({ darkMode }) {
           transition={{ duration: 1, type: "spring" }}
         >
           <div className="avatar-orbit"></div>
+          <div className="avatar-orbit avatar-orbit-2"></div>
           <div className="avatar-glow">
             <div className="avatar-image-slider">
               {avatarImages.map((img, index) => (
                 <img
                   key={index}
                   src={img}
-                  alt={`Project ${index + 1}`}
+                  alt={`Profile ${index + 1}`}
                   className={`avatar-slide ${index === currentImageIndex ? 'active' : ''}`}
                 />
               ))}
             </div>
+          </div>
+          <div className="avatar-dots">
+            {avatarImages.map((_, index) => (
+              <button
+                key={index}
+                className={`avatar-dot ${index === currentImageIndex ? 'active' : ''}`}
+                onClick={() => setCurrentImageIndex(index)}
+                aria-label={`View photo ${index + 1}`}
+              />
+            ))}
           </div>
         </motion.div>
         
@@ -221,7 +238,7 @@ function About({ darkMode }) {
         </div>
       </section>
 
-      {/* Skills Galaxy */}
+      {/* Skills Galaxy - LogoLoop */}
       <section className="skills-galaxy">
         <motion.div
           className="section-header-space"
@@ -229,141 +246,170 @@ function About({ darkMode }) {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <h2 className="section-title-space">Skills Galaxy</h2>
-          <p className="section-subtitle-space">Technologies I master across the cosmos</p>
+          <h2 className="section-title-space">Tech Stack</h2>
+          <p className="section-subtitle-space">Technologies I work with daily</p>
         </motion.div>
 
-        <div className="skills-orbit">
-          {[
-            { name: 'Python', icon: '🐍', level: 95, color: '#3b82f6' },
-            { name: 'React.js', icon: '⚛️', level: 90, color: '#06b6d4' },
-            { name: 'TensorFlow', icon: '🧠', level: 88, color: '#f59e0b' },
-            { name: 'Azure', icon: '☁️', level: 85, color: '#0078d4' },
-            { name: 'NLP & RAG', icon: '💬', level: 92, color: '#ec4899' },
-            { name: 'TypeScript', icon: '📘', level: 87, color: '#3178c6' },
-            { name: 'Docker', icon: '🐳', level: 83, color: '#2496ed' },
-            { name: 'Node.js', icon: '🟢', level: 86, color: '#10b981' }
-          ].map((skill, index) => (
-            <motion.div
-              key={index}
-              className="skill-planet"
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ scale: 1.2, rotate: 360 }}
-            >
-              <div className="skill-orbit-ring" style={{ borderColor: skill.color }}></div>
-              <div className="skill-core" style={{ backgroundColor: skill.color }}>
-                <span className="skill-icon-emoji">{skill.icon}</span>
-              </div>
-              <div className="skill-info">
-                <div className="skill-name-text">{skill.name}</div>
-                <div className="skill-percentage">{skill.level}%</div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        <LogoLoop
+          items={[
+            { icon: '🐍', name: 'Python', color: '#3b82f6' },
+            { icon: '⚛️', name: 'React', color: '#06b6d4' },
+            { icon: '🧠', name: 'TensorFlow', color: '#f59e0b' },
+            { icon: '☁️', name: 'Azure', color: '#0078d4' },
+            { icon: '💬', name: 'NLP/RAG', color: '#ec4899' },
+            { icon: '📘', name: 'TypeScript', color: '#3178c6' },
+            { icon: '🐳', name: 'Docker', color: '#2496ed' },
+            { icon: '🟢', name: 'Node.js', color: '#10b981' },
+            { icon: '🔥', name: 'PyTorch', color: '#ee4c2c' },
+            { icon: '📊', name: 'Pandas', color: '#150458' },
+            { icon: '🌐', name: 'FastAPI', color: '#009688' },
+            { icon: '⚡', name: 'LangChain', color: '#22c55e' },
+            { icon: '🗄️', name: 'PostgreSQL', color: '#336791' },
+            { icon: '🔑', name: 'OpenAI', color: '#412991' },
+            { icon: '🚀', name: 'Vercel', color: '#000' },
+            { icon: '💻', name: 'VS Code', color: '#007acc' }
+          ]}
+          speed={25}
+          direction="left"
+          logoHeight={70}
+          gap={50}
+          pauseOnHover={true}
+          fadeOut={true}
+          scaleOnHover={true}
+        />
       </section>
 
-      {/* Journey Timeline */}
-      <section className="space-timeline">
+      {/* Journey Section */}
+      <section className="journey-section">
         <motion.div
           className="section-header-space"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <h2 className="section-title-space">Journey Through Time</h2>
-          <p className="section-subtitle-space">My evolution in the tech universe</p>
+          <h2 className="section-title-space">My Journey</h2>
+          <p className="section-subtitle-space">From learning to building the future</p>
         </motion.div>
 
-        <div className="timeline-warp">
+        <div className="journey-cards">
           {[
             {
-              year: 'Sep 2025 - Present',
+              year: '2025 - Present',
               title: 'GenAI Developer',
               company: 'BGS Infotech',
-              desc: 'Building GenAI-powered solutions including automated agents, RAG systems, and workflow automation tools using Python, Azure OpenAI, and vector databases.',
-              icon: '🤖'
+              desc: 'Building GenAI solutions, RAG systems, and AI agents using Python, Azure OpenAI, and vector databases.',
+              icon: '🤖',
+              color: '#8b5cf6'
             },
             {
-              year: 'Feb 2025 - May 2025',
+              year: 'Feb - May 2025',
               title: 'AI Intern',
               company: 'Prime Minds Consultancy',
-              desc: 'Built intelligent product data extraction system using NLP models. Integrated LLM-based automation reducing manual workload by 60%.',
-              icon: '🧠'
+              desc: 'Built NLP-based product extraction system. Reduced manual workload by 60% with LLM automation.',
+              icon: '🧠',
+              color: '#ec4899'
             },
             {
-              year: 'May 2024 - Nov 2024',
+              year: 'May - Nov 2024',
               title: 'Project Intern',
               company: 'Kennametal Inc.',
-              desc: 'Developed computer vision solution for manufacturing quality control. Implemented automated defect detection system for quality assurance.',
-              icon: '👁️'
+              desc: 'Developed computer vision solution for manufacturing quality control and defect detection.',
+              icon: '👁️',
+              color: '#06b6d4'
             },
             {
               year: '2021 - 2025',
-              title: 'Bachelor of Engineering',
-              company: 'Visvesvaraya Technological University',
-              desc: 'Information Science & Technology • CGPA: 8.38/10 • Focused on AI/ML, Full-Stack Development, and Cloud Technologies.',
-              icon: '🎓'
+              title: 'B.E. in ISE',
+              company: 'VTU',
+              desc: 'Information Science & Engineering • CGPA: 8.38/10 • AI/ML, Full-Stack, Cloud',
+              icon: '🎓',
+              color: '#f59e0b'
             }
           ].map((event, index) => (
             <motion.div
               key={index}
-              className="timeline-node"
-              initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              className="journey-card"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              style={{ '--card-color': event.color }}
             >
-              <div className="timeline-connector"></div>
-              <div className="timeline-icon-wrapper">
-                <span className="timeline-icon">{event.icon}</span>
+              <div className="journey-card-icon" style={{ background: event.color }}>
+                <span>{event.icon}</span>
               </div>
-              <div className="timeline-card">
-                <div className="timeline-year">{event.year}</div>
-                <h3 className="timeline-event-title">{event.title}</h3>
-                <div className="timeline-company-name">{event.company}</div>
-                <p className="timeline-description">{event.desc}</p>
+              <div className="journey-card-content">
+                <span className="journey-year">{event.year}</span>
+                <h3 className="journey-title">{event.title}</h3>
+                <span className="journey-company">{event.company}</span>
+                <p className="journey-desc">{event.desc}</p>
               </div>
+              <div className="journey-card-line" style={{ background: event.color }}></div>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* Contact CTA */}
-      <section className="space-cta">
+      <section className="cta-section-new">
         <motion.div
-          className="cta-nebula"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
+          className="cta-card-new"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          <h2 className="cta-title-space">Let's Build Something Incredible</h2>
-          <p className="cta-desc-space">Ready to collaborate on the next AI innovation?</p>
-          <div className="cta-actions">
-            <a href="/contact" className="cta-button-primary">
-              <span>Get In Touch</span>
-              <i className="fas fa-rocket"></i>
+          {/* Animated background orbs */}
+          <div className="cta-orb cta-orb-1"></div>
+          <div className="cta-orb cta-orb-2"></div>
+          
+          <motion.h2 
+            className="cta-heading"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Ready to <span className="gradient-text">collaborate</span>?
+          </motion.h2>
+          
+          <motion.p 
+            className="cta-subtext"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            Let's build the next generation of AI-powered solutions together
+          </motion.p>
+          
+          <motion.div 
+            className="cta-buttons"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <a href="/contact" className="cta-btn-primary">
+              <span>Let's Talk</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
             </a>
-            <a href="https://github.com/Akash-62" target="_blank" rel="noopener noreferrer" className="cta-button-secondary">
+            <a href="https://github.com/Akash-62" target="_blank" rel="noopener noreferrer" className="cta-btn-icon">
               <i className="fab fa-github"></i>
-              <span>GitHub</span>
             </a>
-            <a href="https://linkedin.com/in/akash-s62" target="_blank" rel="noopener noreferrer" className="cta-button-secondary">
+            <a href="https://linkedin.com/in/akash-s62" target="_blank" rel="noopener noreferrer" className="cta-btn-icon">
               <i className="fab fa-linkedin"></i>
-              <span>LinkedIn</span>
             </a>
-          </div>
+          </motion.div>
         </motion.div>
       </section>
 
       {/* Footer */}
-      <footer className="space-footer">
-        <a href="/" className="back-to-world">
-          <i className="fas fa-arrow-left"></i>
+      <footer className="about-footer">
+        <a href="/" className="footer-back-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
           <span>Return to Main World</span>
         </a>
-        <p className="footer-credits">© 2025 Akash S • Crafted in the digital cosmos</p>
+        <p className="footer-copyright">© {new Date().getFullYear()} Akash S • Crafted with ❤️</p>
       </footer>
 
       {/* Project Modal */}
