@@ -56,16 +56,6 @@ npm start
 
 ---
 
-## 🤖 Featured AI Projects
-
-| Project | Stack |
-|---|---|
-| **ForKrishi AI** — Voice-first farming assistant | Gemini Vision · Next.js · PWA |
-| **Druva AI** — Streaming developer chat assistant | React · TypeScript · LLM |
-| **SOCA** — AI code auditor | React · Gemini · TypeScript |
-| **Crezia** — Text-to-image generator | React · Hugging Face · Gemini |
-
----
 
 <div align="center">
 
