@@ -10,6 +10,7 @@ const LogoLoop = ({
   pauseOnHover = true,
   fadeOut = true,
   scaleOnHover = true,
+  showLabels = true,
 }) => {
   const duration = `${items.length * 3}s`;
   const animationDirection = direction === 'right' ? 'reverse' : 'normal';
@@ -37,11 +38,17 @@ const LogoLoop = ({
               '--logo-height': `${logoHeight}px`,
               '--item-color': item.color || '#fff'
             }}
+            aria-label={item.name}
+            title={item.name}
           >
             <div className="logo-item-inner" style={{ background: item.color }}>
-              <span className="logo-icon">{item.icon}</span>
+              {item.iconClass ? (
+                <i className={`logo-icon ${item.iconClass}`} style={{ color: item.iconColor || '#fff' }} aria-hidden="true"></i>
+              ) : (
+                <span className="logo-icon" aria-hidden="true">{item.icon}</span>
+              )}
             </div>
-            <span className="logo-name">{item.name}</span>
+            {showLabels && <span className="logo-name">{item.name}</span>}
           </div>
         ))}
       </div>

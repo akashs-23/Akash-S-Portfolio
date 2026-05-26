@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, useGLTF, useAnimations } from '@react-three/drei';
+import { OrbitControls, useGLTF, useAnimations, useProgress } from '@react-three/drei';
 import * as THREE from 'three';
 import * as TWEEN from '@tweenjs/tween.js';
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
@@ -382,8 +382,9 @@ function SceneController({ darkMode, started, setLoadingProgress, onAzimuthChang
       // Hide instructions
       if ((azimuthalAngle >= 0.1 || azimuthalAngle < -0.1) && !instructionsHidden) {
         setInstructionsHidden(true);
-        const instructionsEl = document.getElementById('instructions');
-        if (instructionsEl) instructionsEl.classList.add('hidden');
+        if (window.hideExploreInstructions) {
+          window.hideExploreInstructions();
+        }
       }
     }
   });
@@ -457,19 +458,11 @@ function Scene3D({ darkMode, started, setLoadingProgress }) {
   const [azimuthalAngle, setAzimuthalAngle] = useState(0);
   const [scrollSpeed, setScrollSpeed] = useState(0);
 
-  useEffect(() => {
-    // Simulate loading progress
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 5;
-      setLoadingProgress(progress);
-      if (progress >= 100) {
-        clearInterval(interval);
-      }
-    }, 100);
+  const { progress } = useProgress();
 
-    return () => clearInterval(interval);
-  }, [setLoadingProgress]);
+  useEffect(() => {
+    setLoadingProgress(progress);
+  }, [progress, setLoadingProgress]);
 
   const bgGradient = darkMode 
     ? 'linear-gradient(0deg, hsl(220, 50%,20%) 50%, hsl(220,80%,5%) 100%)'

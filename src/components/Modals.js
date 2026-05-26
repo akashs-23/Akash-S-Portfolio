@@ -7,7 +7,7 @@ function Modals({ projects }) {
   const myProjects = [
   // 1. DRUVA
   {
-    title: 'Druva – AI Intelligent Dev Companion',
+    title: 'Druva AI: Streaming Chat Assistant',
     subtitle: 'AI coding assistant that boosts developer productivity.',
     herobanner: '/images/druva-hero.jpg',
     link: 'https://druva-ai-developer-assistant.vercel.app/',
@@ -41,25 +41,7 @@ function Modals({ projects }) {
     credits: ['Akash S – AI Engineer']
   },
 
-  // 3. MEDIBOT
-  {
-    title: 'MediBot – AI Health Assistant and Medical Diagnosis System',
-    subtitle: 'Smart AI assistant for instant symptom checks and medical guidance.',
-    herobanner: '/images/medibot-hero.jpg',
-    link: 'https://medi-bot-rust.vercel.app/',
-    sections: [
-      { _type: 'subheadline', input: 'The Challenge' },
-      { _type: 'text-field', input: 'Access to quick and reliable medical guidance is limited. MediBot bridges that gap by analyzing symptoms using AI to offer helpful insights.' },
-      { _type: 'subheadline', input: 'The Solution' },
-      { _type: 'text-field', input: 'Designed an AI-driven triage system with voice input, OCR, and preventive-care recommendations. Achieved fast and reliable assessments using advanced RAG architecture.' },
-      { _type: 'product-image', url: '/images/medibot-hero.jpg' },
-      { _type: 'subheadline', input: 'Technologies' },
-      { _type: 'text-field', input: 'React, TypeScript, RAG, OCR, Speech-to-Text, Python' }
-    ],
-    credits: ['Akash S – AI Engineer']
-  },
-
-  // 4. CREZIA
+  // 3. CREZIA
   {
     title: 'Crezia – AI Text-to-Image Generator',
     subtitle: 'Transforming words into stunning visuals using generative AI.',
@@ -77,23 +59,6 @@ function Modals({ projects }) {
     credits: ['Akash S – AI Developer']
   },
 
-  // 5. TRUVA
-  {
-    title: 'Truva – AI Customer Support Copilot',
-    subtitle: 'An adaptive AI assistant that delivers fast, human-like customer support.',
-    herobanner: '/images/truva-hero.jpg',
-    link: 'https://truva-ai-assistant-customer-support.vercel.app/',
-    sections: [
-      { _type: 'subheadline', input: 'Customer Support Gap' },
-      { _type: 'text-field', input: 'Support teams struggle with slow response times. Truva solves this by offering instant AI-driven responses and user understanding.' },
-      { _type: 'subheadline', input: 'Smart Support Engine' },
-      { _type: 'text-field', input: 'Built a memory-enabled chatbot that adapts to user context, provides real-time insights, and works seamlessly as a PWA on all devices.' },
-      { _type: 'product-image', url: '/images/truva-hero.jpg' },
-      { _type: 'subheadline', input: 'Technologies' },
-      { _type: 'text-field', input: 'React, TypeScript, Tailwind, PWA, AI Memory Engine' }
-    ],
-    credits: ['Akash S – Full-Stack & AI Developer']
-  }
 ];
 
 
@@ -119,7 +84,7 @@ function Modals({ projects }) {
               <div className="header-wrapper">
                 <div className="title projectheadline">{project.title}</div>
               </div>
-              <div className="button-round close" onClick={closeModal}>
+              <div className="modal-close-btn" onClick={closeModal}>
                 <i className="icon fa-solid fa-xmark fa-xl"></i>
               </div>
             </div>
@@ -138,7 +103,7 @@ function Modals({ projects }) {
                 if (section._type === 'subheadline') {
                   return <h1 key={sIndex}>{section.input}</h1>;
                 } else if (section._type === 'text-field') {
-                  return <p2 key={sIndex}>{section.input}</p2>;
+                  return <p key={sIndex}>{section.input}</p>;
                 } else if (section._type === 'product-image') {
                   // Handle both URL and Sanity asset reference
                   const imgUrl = section.url || 

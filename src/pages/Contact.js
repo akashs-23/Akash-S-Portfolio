@@ -1,6 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import './Contact.css';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.1, ease: [0.2, 0.8, 0.2, 1] }
+  })
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.88 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.55, delay: i * 0.1, ease: [0.2, 0.8, 0.2, 1] }
+  })
+};
 
 function Contact({ darkMode }) {
   const whatsappNumber = '919880528258';
@@ -12,120 +31,190 @@ function Contact({ darkMode }) {
     window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
+  const socials = [
+    { label: 'GitHub', icon: 'fab fa-github', href: 'https://github.com/Akash-62', cls: 'github' },
+    { label: 'LinkedIn', icon: 'fab fa-linkedin-in', href: 'https://linkedin.com/in/akash-s62', cls: 'linkedin' },
+    { label: 'Twitter', icon: 'fab fa-twitter', href: 'https://x.com/Akash_Dachu_', cls: 'twitter' },
+    { label: 'Instagram', icon: 'fab fa-instagram', href: 'https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=8ccsjqt', cls: 'instagram' },
+  ];
+
   return (
-    <div className={`contact-space-wrapper ${darkMode ? 'dark' : ''}`}>
-      {/* Animated Space Background */}
-      <div className="contact-stars-container"></div>
-      <div className="contact-nebula-bg"></div>
+    <div className={`ct-wrap ${darkMode ? 'dark' : ''}`}>
+      {/* Background orbs */}
+      <div className="ct-orb ct-orb-1" aria-hidden="true" />
+      <div className="ct-orb ct-orb-2" aria-hidden="true" />
+      <div className="ct-orb ct-orb-3" aria-hidden="true" />
+      <div className="ct-grid-overlay" aria-hidden="true" />
 
-      <div className="contact-container">
-        {/* Header */}
-        <section className="contact-space-header">
-          <h1 className="contact-space-title">Let's Connect</h1>
-          <p className="contact-space-subtitle">Pick your preferred way to reach out — I'm just one click away!</p>
-        </section>
+      <div className="ct-container">
 
-        {/* Main Contact Options */}
-        <div className="contact-quick-actions">
-          {/* WhatsApp - Primary CTA */}
-          <button onClick={openWhatsApp} className="contact-primary-btn whatsapp-btn">
-            <div className="btn-icon">
-              <i className="fab fa-whatsapp"></i>
-            </div>
-            <div className="btn-content">
-              <span className="btn-title">Chat on WhatsApp</span>
-              <span className="btn-subtitle">Quick & Easy — Let's Talk!</span>
-            </div>
-            <i className="fas fa-arrow-right btn-arrow"></i>
-          </button>
+        {/* Hero */}
+        <motion.header
+          className="ct-hero"
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div className="ct-status-badge" variants={fadeUp} custom={0}>
+            <span className="ct-pulse" />
+            Available for opportunities
+          </motion.div>
 
-          {/* Email */}
-          <a 
-            href={`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=Hello%20Akash!`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="contact-primary-btn email-btn"
-          >
-            <div className="btn-icon">
-              <i className="fas fa-envelope"></i>
-            </div>
-            <div className="btn-content">
-              <span className="btn-title">Send an Email</span>
-              <span className="btn-subtitle">{email}</span>
-            </div>
-            <i className="fas fa-arrow-right btn-arrow"></i>
-          </a>
+          <motion.h1 className="ct-title" variants={fadeUp} custom={1}>
+            Let&apos;s Build<br />
+            <span className="ct-title-gradient">Something Great</span>
+          </motion.h1>
 
-          {/* Call */}
-          <a href={`tel:${phone}`} className="contact-primary-btn call-btn">
-            <div className="btn-icon">
-              <i className="fas fa-phone-alt"></i>
-            </div>
-            <div className="btn-content">
-              <span className="btn-title">Give me a Call</span>
-              <span className="btn-subtitle">+91-9880528258</span>
-            </div>
-            <i className="fas fa-arrow-right btn-arrow"></i>
-          </a>
-        </div>
+          <motion.p className="ct-subtitle" variants={fadeUp} custom={2}>
+            Got an idea? Let&apos;s talk.
+          </motion.p>
 
-        {/* Location Badge */}
-        <div className="location-badge">
-          <i className="fas fa-map-marker-alt"></i>
-          <span>Based in Bangalore, India</span>
-        </div>
+          <motion.div className="ct-location" variants={fadeUp} custom={3}>
+            <i className="fas fa-location-dot" aria-hidden="true" />
+            Bangalore, India
+          </motion.div>
+        </motion.header>
 
-        {/* Social & Resume Section */}
-        <div className="contact-secondary-grid">
-          {/* Social Media */}
-          <div className="social-section">
-            <h3 className="section-label">
-              <i className="fas fa-globe"></i>
-              Find me online
-            </h3>
-            <div className="social-links-row">
-              <a href="https://github.com/Akash-62" target="_blank" rel="noopener noreferrer" className="social-icon-btn github">
-                <i className="fab fa-github"></i>
-              </a>
-              <a href="https://linkedin.com/in/akash-s62" target="_blank" rel="noopener noreferrer" className="social-icon-btn linkedin">
-                <i className="fab fa-linkedin-in"></i>
-              </a>
-              <a href="https://x.com/Akash_Dachu_" target="_blank" rel="noopener noreferrer" className="social-icon-btn twitter">
-                <i className="fab fa-twitter"></i>
-              </a>
-              <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=8ccsjqt" target="_blank" rel="noopener noreferrer" className="social-icon-btn instagram">
-                <i className="fab fa-instagram"></i>
-              </a>
+        {/* Primary action cards */}
+        <motion.div
+          className="ct-actions"
+          initial="hidden"
+          animate="visible"
+        >
+          {[
+            {
+              cls: 'wa',
+              iconBg: 'linear-gradient(135deg,#25d366,#128c7e)',
+              icon: 'fab fa-whatsapp',
+              label: 'Chat on WhatsApp',
+              sub: 'Quick & Easy — Let\'s Talk!',
+              accent: '#25d366',
+              onClick: openWhatsApp,
+              as: 'button'
+            },
+            {
+              cls: 'em',
+              iconBg: 'linear-gradient(135deg,#f97316,#ea580c)',
+              icon: 'fas fa-envelope',
+              label: 'Send an Email',
+              sub: email,
+              accent: '#f97316',
+              href: `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=Hello%20Akash!`,
+              as: 'a'
+            },
+            {
+              cls: 'ph',
+              iconBg: 'linear-gradient(135deg,#3b82f6,#2563eb)',
+              icon: 'fas fa-phone-alt',
+              label: 'Give me a Call',
+              sub: '+91-9880528258',
+              accent: '#3b82f6',
+              href: `tel:${phone}`,
+              as: 'a'
+            }
+          ].map((item, i) => {
+            const inner = (
+              <>
+                <span className="ct-card-shimmer" aria-hidden="true" />
+                <span className="ct-card-icon" style={{ background: item.iconBg }}>
+                  <i className={item.icon} aria-hidden="true" />
+                </span>
+                <span className="ct-card-body">
+                  <span className="ct-card-label">{item.label}</span>
+                  <span className="ct-card-sub">{item.sub}</span>
+                </span>
+                <span className="ct-card-arrow">
+                  <i className="fas fa-arrow-right" aria-hidden="true" />
+                </span>
+                <span className="ct-card-glow" style={{ '--accent': item.accent }} aria-hidden="true" />
+              </>
+            );
+
+            return (
+              <motion.div
+                key={item.cls}
+                className={`ct-card ct-card-${item.cls}`}
+                variants={scaleIn}
+                custom={i}
+                style={{ '--accent': item.accent }}
+              >
+                {item.as === 'button' ? (
+                  <button className="ct-card-inner" onClick={item.onClick}>
+                    {inner}
+                  </button>
+                ) : (
+                  <a className="ct-card-inner" href={item.href} target="_blank" rel="noopener noreferrer">
+                    {inner}
+                  </a>
+                )}
+              </motion.div>
+            );
+          })}
+        </motion.div>
+
+        {/* Social + Resume row */}
+        <motion.div
+          className="ct-bottom-row"
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div className="ct-social-card" variants={fadeUp} custom={0}>
+            <p className="ct-section-eyebrow">
+              <i className="fas fa-globe" aria-hidden="true" /> Find me online
+            </p>
+            <div className="ct-socials">
+              {socials.map((s, i) => (
+                <motion.a
+                  key={s.cls}
+                  className={`ct-social-btn ct-social-${s.cls}`}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  variants={scaleIn}
+                  custom={i * 0.5}
+                  whileHover={{ y: -5, scale: 1.12 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <i className={s.icon} aria-hidden="true" />
+                  <span>{s.label}</span>
+                </motion.a>
+              ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Resume Download */}
-          <div className="resume-section">
-            <h3 className="section-label">
-              <i className="fas fa-file-alt"></i>
-              Want my resume?
-            </h3>
-            <a href="/resume section/AKASH S [2025].pdf" download className="resume-download-btn">
-              <i className="fas fa-download"></i>
+          <motion.div className="ct-resume-card" variants={fadeUp} custom={1}>
+            <p className="ct-section-eyebrow">
+              <i className="fas fa-file-alt" aria-hidden="true" /> Want my resume?
+            </p>
+            <a
+              href="/resume%20section/AKASH%20S%20%5B2025%5D.pdf"
+              download
+              className="ct-resume-btn"
+            >
+              <span className="ct-resume-shimmer" aria-hidden="true" />
+              <i className="fas fa-download" aria-hidden="true" />
               <span>Download Resume</span>
             </a>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        {/* Back Button */}
-        <section className="contact-back-section">
-          <Link to="/" className="back-to-world-button">
-            <span className="btn-bg"></span>
-            <span className="btn-glow"></span>
-            <span className="btn-particles">
-              <span></span><span></span><span></span><span></span><span></span>
-            </span>
-            <span className="btn-inner">
-              <i className="fas fa-rocket"></i>
-              <span>Return to Main World</span>
+        {/* Footer */}
+        <motion.footer
+          className="ct-footer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 0.6 }}
+        >
+          <Link to="/" className="ct-back-btn">
+            <span className="ct-back-bg" aria-hidden="true" />
+            <span className="ct-back-glow" aria-hidden="true" />
+            <span className="ct-back-inner">
+              <i className="fas fa-arrow-left" aria-hidden="true" />
+              Return to main world
             </span>
           </Link>
-        </section>
+          <p className="ct-copy">&copy; {new Date().getFullYear()} Akash S</p>
+        </motion.footer>
       </div>
     </div>
   );

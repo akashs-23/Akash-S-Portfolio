@@ -1,20 +1,32 @@
 import React from 'react';
+import StaggeredMenu from './StaggeredMenu';
 
 function Menu({ darkMode }) {
+  const menuItems = [
+    { label: "Akash's World", ariaLabel: "Return to Akash's world", link: '/' },
+    { label: 'About', ariaLabel: 'Learn about Akash', link: '/about' },
+    { label: 'Contact', ariaLabel: 'Contact Akash', link: '/contact' }
+  ];
+  const socialItems = [
+    { label: 'WhatsApp', icon: 'fab fa-whatsapp', link: 'https://wa.me/919880528258' },
+    { label: 'LinkedIn', icon: 'fab fa-linkedin-in', link: 'https://linkedin.com/in/akash-s62' },
+    { label: 'X', icon: null, text: '𝕏', link: 'https://x.com/Akash_Dachu_' }
+  ];
+
   return (
-    <nav role="navigation">
-      <div id="menuToggle">
-        <input type="checkbox" />
-        <span style={{background: darkMode ? 'white' : 'black'}}></span>
-        <span style={{background: darkMode ? 'white' : 'black'}}></span>
-        <span style={{background: darkMode ? 'white' : 'black'}}></span>
-        <ul id="menu">
-          <a href="/"><li className="active">Akash'S World</li></a>
-          <a href="/about"><li>About</li></a>
-          <a href="/contact"><li>Contact</li></a>
-        </ul>
-      </div>
-    </nav>
+    <StaggeredMenu
+      isFixed={true}
+      position="right"
+      items={menuItems}
+      socialItems={socialItems}
+      displaySocials={true}
+      displayItemNumbering={true}
+      colors={['#303c92', '#757BFD']}
+      menuButtonColor={darkMode ? '#ffffff' : '#10131d'}
+      openMenuButtonColor="#ffffff"
+      changeMenuColorOnOpen={true}
+      accentColor="#757BFD"
+    />
   );
 }
 

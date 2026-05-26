@@ -1,447 +1,318 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { gsap } from 'gsap';
+import { Link, useNavigate } from 'react-router-dom';
+import CircularGallery from '../components/CircularGallery';
 import LogoLoop from '../components/LogoLoop';
+import ProfileCard from '../components/ProfileCard';
+import ScrollStack, { ScrollStackItem } from '../components/ScrollStack';
+import projectsData from '../data/projects';
 import './About.css';
 
-function About({ darkMode }) {
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
-  // Profile photos - Add your photos as profile1.jpg, profile2.jpg, profile3.jpg in public/images/
-  const avatarImages = [
-    '/images/profile1.jpg',
-    '/images/profile2.jpg',
-    '/images/profile3.jpg'
-  ];
+const projects = projectsData;
 
-  useEffect(() => {
-    gsap.fromTo(
-      '.hero-text',
-      { opacity: 0, y: 60 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.25 }
-    );
-    
-    // Create stars
-    const createStars = () => {
-      const starsContainer = document.querySelector('.stars-container');
-      if (!starsContainer) return;
-      
-      // Clear existing stars first
-      starsContainer.innerHTML = '';
-      
-      for (let i = 0; i < 200; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.left = `${Math.random() * 100}%`;
-        star.style.top = `${Math.random() * 100}%`;
-        star.style.animationDelay = `${Math.random() * 3}s`;
-        star.style.animationDuration = `${2 + Math.random() * 3}s`;
-        starsContainer.appendChild(star);
-      }
-    };
-    
-    createStars();
-  }, []);
+const capabilities = [
+  {
+    number: '01',
+    title: 'LLM Systems',
+    description: 'Applications designed around grounded responses, streaming UX, and practical workflows.'
+  },
+  {
+    number: '02',
+    title: 'RAG Pipelines',
+    description: 'Retrieval flows that connect domain knowledge to useful, contextual AI responses.'
+  },
+  {
+    number: '03',
+    title: 'Agentic Workflows',
+    description: 'Task-oriented AI experiences that coordinate tools and move users toward outcomes.'
+  }
+];
 
-  // Separate useEffect for image carousel to prevent dependency issues
-  useEffect(() => {
-    const imageInterval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % 3);
-    }, 3000);
-    
-    return () => clearInterval(imageInterval);
-  }, []);
+const journey = [
+  {
+    period: 'Sep 2025 - Apr 2026',
+    role: 'AI Software Intern',
+    place: 'BGS Infotech',
+    description: 'Building RAG systems, AI agents, and GenAI solutions with Python and Azure OpenAI.'
+  },
+  {
+    period: 'Feb - May 2025',
+    role: 'AI Intern',
+    place: 'Prime Minds Consultancy',
+    description: 'Built an NLP-based extraction workflow that reduced manual effort through LLM automation.'
+  },
+  {
+    period: 'May - Nov 2024',
+    role: 'Project Intern',
+    place: 'Kennametal Inc.',
+    description: 'Developed a computer vision solution for manufacturing quality-control tasks.'
+  },
+  {
+    period: '2021 - 2025',
+    role: 'B.E. in Information Science',
+    place: 'VTU',
+    description: 'Graduated with an 8.38 CGPA, focused on software engineering and applied AI.'
+  }
+];
 
-  const projects = [
-    {
-      id: 1,
-      title: 'Druva – AI Intelligent Dev Companion',
-      description: 'AI-powered developer assistant with code analysis and voice-based queries for hands-free workflows',
-      tech: ['React', 'TypeScript', 'Vite', 'Tailwind', 'Speech-to-Text'],
-      image: '/assets/druva.jpg',
-      link: 'https://druva-ai-developer-assistant.vercel.app/',
-      color: '#3b82f6'
-    },
-    {
-      id: 2,
-      title: 'SOCA – AI Smart Optimized Code Auditor',
-      description: 'AI code reviewer with automated feedback, debugging tips, and gamified challenge mode',
-      tech: ['React', 'TypeScript', 'Tailwind', 'AI Review'],
-      image: '/assets/soca.jpg',
-      link: 'https://soca-ai-driven-code-review-assistan.vercel.app/',
-      color: '#8b5cf6'
-    },
-    {
-      id: 3,
-      title: 'MediBot – AI Health Assistant',
-      description: 'AI health assistant for symptom triage, preventive care with multilingual voice input and OCR',
-      tech: ['React', 'TypeScript', 'RAG', 'OCR', 'Voice Input'],
-      image: '/assets/medibot.jpg',
-      link: 'https://medi-bot-rust.vercel.app/',
-      color: '#ec4899'
-    },
-    {
-      id: 4,
-      title: 'Crezia – AI Text-to-Image Generator',
-      description: 'Real-time text-to-image generator with custom styles, ratios, and fast rendering',
-      tech: ['React', 'TypeScript', 'Vite', 'Gemini', 'Hugging Face'],
-      image: '/assets/crezia.jpg',
-      link: 'https://crezia-ai-text-image-generator.vercel.app/',
-      color: '#10b981'
-    },
-    {
-      id: 5,
-      title: 'Truva – AI Customer Support Copilot',
-      description: 'AI support assistant with memory, insights, and adaptive conversation flows in a responsive PWA',
-      tech: ['React', 'TypeScript', 'Tailwind', 'PWA'],
-      image: '/assets/truva.jpg',
-      link: 'https://truva-ai-assistant-customer-support.vercel.app/',
-      color: '#f59e0b'
-    }
-  ];
+const stack = [
+  { name: 'Python', iconClass: 'fab fa-python', color: '#3676ab' },
+  { name: 'TypeScript', iconClass: 'fab fa-js', color: '#3178c6' },
+  { name: 'JavaScript', iconClass: 'fab fa-js', color: '#f7df1e', iconColor: '#10131d' },
+  { name: 'SQL', iconClass: 'fas fa-database', color: '#336791' },
+  { name: 'Generative AI', iconClass: 'fas fa-wand-magic-sparkles', color: '#8b5cf6' },
+  { name: 'LLMs', iconClass: 'fas fa-brain', color: '#7c3aed' },
+  { name: 'RAG', iconClass: 'fas fa-book-open', color: '#ec4899' },
+  { name: 'Prompt Engineering', iconClass: 'fas fa-terminal', color: '#06b6d4' },
+  { name: 'AI Agents', iconClass: 'fas fa-robot', color: '#a855f7' },
+  { name: 'Agentic Workflows', iconClass: 'fas fa-diagram-project', color: '#6366f1' },
+  { name: 'LangChain', iconClass: 'fas fa-link', color: '#10b981' },
+  { name: 'LangGraph', iconClass: 'fas fa-share-nodes', color: '#14b8a6' },
+  { name: 'Vector Databases', iconClass: 'fas fa-layer-group', color: '#f97316' },
+  { name: 'Model Fine-Tuning', iconClass: 'fas fa-sliders', color: '#f59e0b' },
+  { name: 'LoRA', iconClass: 'fas fa-microchip', color: '#fb7185' },
+  { name: 'Hugging Face', icon: '🤗', color: '#fbbf24' },
+  { name: 'Transformers', iconClass: 'fas fa-arrows-rotate', color: '#f97316' },
+  { name: 'Whisper', iconClass: 'fas fa-wave-square', color: '#06b6d4' },
+  { name: 'Scikit-learn', iconClass: 'fas fa-chart-line', color: '#f97316' },
+  { name: 'Pandas', iconClass: 'fas fa-table-cells', color: '#150458' },
+  { name: 'NumPy', iconClass: 'fas fa-calculator', color: '#4d77cf' },
+  { name: 'FastAPI', iconClass: 'fas fa-bolt', color: '#009688' },
+  { name: 'React.js', iconClass: 'fab fa-react', color: '#087ea4' },
+  { name: 'Next.js', iconClass: 'fas fa-n', color: '#20232a' },
+  { name: 'Node.js', iconClass: 'fab fa-node-js', color: '#339933' },
+  { name: 'Microsoft Azure', iconClass: 'fab fa-microsoft', color: '#0078d4' },
+  { name: 'Docker', iconClass: 'fab fa-docker', color: '#2496ed' },
+  { name: 'CI/CD Pipelines', iconClass: 'fas fa-code-branch', color: '#ef4444' },
+  { name: 'Vercel', iconClass: 'fas fa-caret-up', color: '#20232a' },
+  { name: 'PostgreSQL', iconClass: 'fas fa-database', color: '#336791' },
+  { name: 'ChromaDB', iconClass: 'fas fa-cubes', color: '#f97316' },
+  { name: 'SQLAlchemy', iconClass: 'fas fa-server', color: '#d9485f' }
+];
+
+const reveal = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0 }
+};
+
+function Reveal({ children, className = '', delay = 0 }) {
+  return (
+    <motion.div
+      className={className}
+      variants={reveal}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.16 }}
+      transition={{ duration: 0.6, delay, ease: [0.2, 0.8, 0.2, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function About() {
+  const navigate = useNavigate();
+  const pageRef = useRef(null);
 
   return (
-    <div className={`space-about-wrapper ${darkMode ? 'dark' : ''}`}>
-      {/* Animated Space Background */}
-      <div className="stars-container"></div>
-      <div className="nebula-bg"></div>
-      
-      {/* Hero Section */}
-      <section className="space-hero">
-        <motion.div
-          className="hero-avatar-container"
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ duration: 1, type: "spring" }}
-        >
-          <div className="avatar-orbit"></div>
-          <div className="avatar-orbit avatar-orbit-2"></div>
-          <div className="avatar-glow">
-            <div className="avatar-image-slider">
-              {avatarImages.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt={`Profile ${index + 1}`}
-                  className={`avatar-slide ${index === currentImageIndex ? 'active' : ''}`}
-                />
-              ))}
+    <div className="about-page" ref={pageRef}>
+      <div className="about-aurora about-aurora-one" aria-hidden="true"></div>
+      <div className="about-aurora about-aurora-two" aria-hidden="true"></div>
+      <div className="about-grid-bg" aria-hidden="true"></div>
+
+      <header className="about-header">
+        <Link to="/" className="about-brand">
+          <span className="brand-dot"></span>
+          <span>AKASH S</span>
+        </Link>
+        <nav className="about-nav" aria-label="About page navigation">
+          <a href="#projects">Work</a>
+          <a href="#journey">Journey</a>
+          <Link to="/contact" className="nav-contact">Contact</Link>
+        </nav>
+      </header>
+
+      <main className="about-main">
+        <section className="about-hero">
+          <motion.div
+            className="about-hero-copy"
+            initial="hidden"
+            animate="visible"
+            variants={reveal}
+            transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+          >
+            <div className="about-status">
+              <span className="status-pulse"></span>
+              AI/ML + Software Engineer
             </div>
-          </div>
-          <div className="avatar-dots">
-            {avatarImages.map((_, index) => (
-              <button
-                key={index}
-                className={`avatar-dot ${index === currentImageIndex ? 'active' : ''}`}
-                onClick={() => setCurrentImageIndex(index)}
-                aria-label={`View photo ${index + 1}`}
-              />
+            <h1>
+              Building AI products that turn
+              <span className="about-gradient"> complex problems </span>
+              into usable experiences.
+            </h1>
+            <p className="about-lead">
+              I&apos;m Akash S, focused on LLM-powered systems, RAG pipelines,
+              agentic AI workflows, and AI products that solve real problems.
+            </p>
+            <div className="about-actions">
+              <Link to="/contact" className="about-primary">
+                Let&apos;s connect <i className="fas fa-arrow-right" aria-hidden="true"></i>
+              </Link>
+              <a
+                href="https://github.com/Akash-62"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="about-secondary"
+              >
+                <i className="fab fa-github" aria-hidden="true"></i> GitHub
+              </a>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="about-profile-column"
+            initial={{ opacity: 0, x: 34 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.16, ease: [0.2, 0.8, 0.2, 1] }}
+          >
+            <ProfileCard
+              name="Akash S"
+              title="AI/ML & Software Engineer"
+              handle="akash-s62"
+              status="Available"
+              contactText="Contact"
+              avatarUrl="/images/akash-profile-card.png"
+              miniAvatarUrl="/images/akash-profile-card.png"
+              showUserInfo={true}
+              enableTilt={true}
+              enableMobileTilt={false}
+              behindGlowEnabled={true}
+              behindGlowColor="rgba(117, 123, 253, 0.28)"
+              behindGlowSize="56%"
+              innerGradient="linear-gradient(145deg, rgba(96, 73, 110, 0.2) 0%, rgba(113, 196, 255, 0.1) 100%)"
+              onContactClick={() => navigate('/contact')}
+            />
+            <div className="profile-stats">
+              <div className="profile-stat">
+                <strong>15+</strong>
+                <span>Featured AI products</span>
+              </div>
+              <div className="profile-stat">
+                <strong>8.38</strong>
+                <span>Engineering CGPA</span>
+              </div>
+            </div>
+          </motion.div>
+        </section>
+
+        <section className="about-stack" aria-label="Technology stack">
+          <LogoLoop
+            items={stack}
+            direction="left"
+            logoHeight={58}
+            gap={34}
+            pauseOnHover={true}
+            fadeOut={true}
+            scaleOnHover={true}
+            showLabels={true}
+          />
+        </section>
+
+        <section className="about-section" id="projects">
+          <Reveal className="section-intro">
+            <div>
+              <span className="section-eyebrow">Selected Work</span>
+              <h2>AI products built for real interaction</h2>
+            </div>
+            <p>Live projects spanning agriculture, developer tooling, code quality, and creative AI.</p>
+          </Reveal>
+
+          <Reveal className="project-gallery-frame">
+            <CircularGallery
+              items={projects}
+              cardMode={true}
+              scrollSpeed={1.7}
+            />
+          </Reveal>
+        </section>
+
+        <section className="about-section capability-section">
+          <Reveal className="section-intro">
+            <div>
+              <span className="section-eyebrow">What I Build</span>
+              <h2>From intelligence to interface</h2>
+            </div>
+          </Reveal>
+          <ScrollStack
+            className="capability-stack"
+            scrollContainerRef={pageRef}
+            itemDistance={34}
+            itemScale={0.025}
+            itemStackDistance={24}
+            stackPosition="17%"
+            scaleEndPosition="9%"
+            baseScale={0.93}
+            rotationAmount={0.35}
+            blurAmount={0.45}
+            revealFromStack={true}
+          >
+            {capabilities.map((capability) => (
+              <ScrollStackItem key={capability.title} itemClassName="capability-card">
+                <span>{capability.number}</span>
+                <h3>{capability.title}</h3>
+                <p>{capability.description}</p>
+              </ScrollStackItem>
+            ))}
+          </ScrollStack>
+        </section>
+
+        <section className="about-section journey-section-modern" id="journey">
+          <Reveal className="section-intro">
+            <div>
+              <span className="section-eyebrow">Experience</span>
+              <h2>Journey so far</h2>
+            </div>
+          </Reveal>
+          <div className="journey-timeline">
+            {journey.map((event, index) => (
+              <Reveal key={event.role} className="journey-row" delay={index * 0.07}>
+                <div className="journey-period">{event.period}</div>
+                <div className="journey-marker" aria-hidden="true"><span></span></div>
+                <div className="journey-detail">
+                  <h3>{event.role}</h3>
+                  <span>{event.place}</span>
+                  <p>{event.description}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
-        </motion.div>
-        
-        <motion.h1
-          className="hero-text space-title"
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1, delay: 0.3 }}
-        >
-          Akash S
-        </motion.h1>
+        </section>
 
-        <motion.div
-          className="role-tags"
-          initial={{ y: 80, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
-        >
-          <span className="role-tag">GenAI Developer</span>
-          <span className="role-tag">Software Engineer</span>
-          <span className="role-tag">Full-Stack AI</span>
-        </motion.div>
-
-        <motion.p
-          className="hero-text hero-bio"
-          initial={{ y: 80, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1, delay: 0.7 }}
-        >
-          Software Engineer & GenAI Developer with hands-on experience building LLM applications, NLP systems, and full-stack AI products.
-          <br />
-          Currently developing scalable GenAI solutions including RAG pipelines, AI agents, and workflow automation tools.
-        </motion.p>
-
-        <motion.div
-          className="hero-stats"
-          initial={{ y: 60, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1, delay: 0.9 }}
-        >
-          <div className="stat-item">
-            <div className="stat-value">3+</div>
-            <div className="stat-label">Internships</div>
+        <Reveal className="about-cta">
+          <div>
+            <span className="section-eyebrow">Start A Conversation</span>
+            <h2>Have an AI idea worth building?</h2>
+            <p>Let&apos;s turn it into a useful product with a clear user experience.</p>
           </div>
-          <div className="stat-divider"></div>
-          <div className="stat-item">
-            <div className="stat-value">5</div>
-            <div className="stat-label">AI Projects</div>
-          </div>
-          <div className="stat-divider"></div>
-          <div className="stat-item">
-            <div className="stat-value">8.38</div>
-            <div className="stat-label">CGPA</div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Featured Projects */}
-      <section className="projects-constellation">
-        <motion.div
-          className="section-header-space"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          <h2 className="section-title-space">Featured Projects</h2>
-          <p className="section-subtitle-space">Explore my universe of creations</p>
-        </motion.div>
-
-        <div className="projects-grid">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              className="project-planet"
-              initial={{ opacity: 0, y: 100 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -10 }}
-              onClick={() => setSelectedProject(project)}
+          <div className="about-cta-actions">
+            <Link to="/contact" className="about-primary">Contact me</Link>
+            <a
+              href="/resume%20section/AKASH%20S%20%5B2025%5D.pdf"
+              className="about-secondary"
+              download
             >
-              <div className="planet-glow" style={{ backgroundColor: project.color }}></div>
-              <div className="project-content">
-                <div className="project-number">0{project.id}</div>
-                <h3 className="project-title">{project.title}</h3>
-                <p className="project-desc">{project.description}</p>
-                <div className="project-tech">
-                  {project.tech.map((tech, i) => (
-                    <span key={i} className="tech-badge">{tech}</span>
-                  ))}
-                </div>
-                <button className="view-project-btn">
-                  <span>View Project</span>
-                  <i className="fas fa-arrow-right"></i>
-                </button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Skills Galaxy - LogoLoop */}
-      <section className="skills-galaxy">
-        <motion.div
-          className="section-header-space"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          <h2 className="section-title-space">Tech Stack</h2>
-          <p className="section-subtitle-space">Technologies I work with daily</p>
-        </motion.div>
-
-        <LogoLoop
-          items={[
-            { icon: '🐍', name: 'Python', color: '#3b82f6' },
-            { icon: '⚛️', name: 'React', color: '#06b6d4' },
-            { icon: '🧠', name: 'TensorFlow', color: '#f59e0b' },
-            { icon: '☁️', name: 'Azure', color: '#0078d4' },
-            { icon: '💬', name: 'NLP/RAG', color: '#ec4899' },
-            { icon: '📘', name: 'TypeScript', color: '#3178c6' },
-            { icon: '🐳', name: 'Docker', color: '#2496ed' },
-            { icon: '🟢', name: 'Node.js', color: '#10b981' },
-            { icon: '🔥', name: 'PyTorch', color: '#ee4c2c' },
-            { icon: '📊', name: 'Pandas', color: '#150458' },
-            { icon: '🌐', name: 'FastAPI', color: '#009688' },
-            { icon: '⚡', name: 'LangChain', color: '#22c55e' },
-            { icon: '🗄️', name: 'PostgreSQL', color: '#336791' },
-            { icon: '🔑', name: 'OpenAI', color: '#412991' },
-            { icon: '🚀', name: 'Vercel', color: '#000' },
-            { icon: '💻', name: 'VS Code', color: '#007acc' }
-          ]}
-          speed={25}
-          direction="left"
-          logoHeight={70}
-          gap={50}
-          pauseOnHover={true}
-          fadeOut={true}
-          scaleOnHover={true}
-        />
-      </section>
-
-      {/* Journey Section */}
-      <section className="journey-section">
-        <motion.div
-          className="section-header-space"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          <h2 className="section-title-space">My Journey</h2>
-          <p className="section-subtitle-space">From learning to building the future</p>
-        </motion.div>
-
-        <div className="journey-cards">
-          {[
-            {
-              year: '2025 - Present',
-              title: 'GenAI Developer',
-              company: 'BGS Infotech',
-              desc: 'Building GenAI solutions, RAG systems, and AI agents using Python, Azure OpenAI, and vector databases.',
-              icon: '🤖',
-              color: '#8b5cf6'
-            },
-            {
-              year: 'Feb - May 2025',
-              title: 'AI Intern',
-              company: 'Prime Minds Consultancy',
-              desc: 'Built NLP-based product extraction system. Reduced manual workload by 60% with LLM automation.',
-              icon: '🧠',
-              color: '#ec4899'
-            },
-            {
-              year: 'May - Nov 2024',
-              title: 'Project Intern',
-              company: 'Kennametal Inc.',
-              desc: 'Developed computer vision solution for manufacturing quality control and defect detection.',
-              icon: '👁️',
-              color: '#06b6d4'
-            },
-            {
-              year: '2021 - 2025',
-              title: 'B.E. in ISE',
-              company: 'VTU',
-              desc: 'Information Science & Engineering • CGPA: 8.38/10 • AI/ML, Full-Stack, Cloud',
-              icon: '🎓',
-              color: '#f59e0b'
-            }
-          ].map((event, index) => (
-            <motion.div
-              key={index}
-              className="journey-card"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              style={{ '--card-color': event.color }}
-            >
-              <div className="journey-card-icon" style={{ background: event.color }}>
-                <span>{event.icon}</span>
-              </div>
-              <div className="journey-card-content">
-                <span className="journey-year">{event.year}</span>
-                <h3 className="journey-title">{event.title}</h3>
-                <span className="journey-company">{event.company}</span>
-                <p className="journey-desc">{event.desc}</p>
-              </div>
-              <div className="journey-card-line" style={{ background: event.color }}></div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Contact CTA */}
-      <section className="cta-section-new">
-        <motion.div
-          className="cta-card-new"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          {/* Animated background orbs */}
-          <div className="cta-orb cta-orb-1"></div>
-          <div className="cta-orb cta-orb-2"></div>
-          
-          <motion.h2 
-            className="cta-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Ready to <span className="gradient-text">collaborate</span>?
-          </motion.h2>
-          
-          <motion.p 
-            className="cta-subtext"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            Let's build the next generation of AI-powered solutions together
-          </motion.p>
-          
-          <motion.div 
-            className="cta-buttons"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <a href="/contact" className="cta-btn-primary">
-              <span>Let's Talk</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
+              Resume
             </a>
-            <a href="https://github.com/Akash-62" target="_blank" rel="noopener noreferrer" className="cta-btn-icon">
-              <i className="fab fa-github"></i>
-            </a>
-            <a href="https://linkedin.com/in/akash-s62" target="_blank" rel="noopener noreferrer" className="cta-btn-icon">
-              <i className="fab fa-linkedin"></i>
-            </a>
-          </motion.div>
-        </motion.div>
-      </section>
+          </div>
+        </Reveal>
+      </main>
 
-      {/* Footer */}
-      <footer className="about-footer">
-        <a href="/" className="footer-back-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
-          </svg>
-          <span>Return to Main World</span>
-        </a>
-        <p className="footer-copyright">© {new Date().getFullYear()} Akash S • Crafted with ❤️</p>
+      <footer className="about-footer-modern">
+        <Link to="/" className="back-world">
+          <i className="fas fa-arrow-left" aria-hidden="true"></i> Return to main world
+        </Link>
+        <p>(c) {new Date().getFullYear()} Akash S</p>
       </footer>
-
-      {/* Project Modal */}
-      {selectedProject && (
-        <motion.div
-          className="project-modal-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          onClick={() => setSelectedProject(null)}
-        >
-          <motion.div
-            className="project-modal"
-            initial={{ scale: 0.8, y: 100 }}
-            animate={{ scale: 1, y: 0 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button className="modal-close" onClick={() => setSelectedProject(null)}>
-              <i className="fas fa-times"></i>
-            </button>
-            <h2>{selectedProject.title}</h2>
-            <p>{selectedProject.description}</p>
-            <div className="modal-tech">
-              {selectedProject.tech.map((tech, i) => (
-                <span key={i}>{tech}</span>
-              ))}
-            </div>
-            <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="modal-link">
-              View on GitHub <i className="fas fa-external-link-alt"></i>
-            </a>
-          </motion.div>
-        </motion.div>
-      )}
     </div>
   );
 }

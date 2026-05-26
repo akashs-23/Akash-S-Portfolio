@@ -1,0 +1,385 @@
+.pc-card-wrapper {
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+  --pointer-from-center: 0;
+  --pointer-from-top: 0.5;
+  --pointer-from-left: 0.5;
+  --card-opacity: 0;
+  --rotate-x: 0deg;
+  --rotate-y: 0deg;
+  --background-x: 50%;
+  --background-y: 50%;
+  --grain: none;
+  --icon: none;
+  --behind-glow-color: rgba(125, 190, 255, 0.67);
+  --behind-glow-size: 50%;
+  --inner-gradient: none;
+  --sunpillar-1: hsl(2, 100%, 73%);
+  --sunpillar-2: hsl(53, 100%, 69%);
+  --sunpillar-3: hsl(93, 100%, 69%);
+  --sunpillar-4: hsl(176, 100%, 76%);
+  --sunpillar-5: hsl(228, 100%, 74%);
+  --sunpillar-6: hsl(283, 100%, 73%);
+  --card-radius: 30px;
+  perspective: 500px;
+  transform: translate3d(0, 0, 0.1px);
+  position: relative;
+  touch-action: none;
+}
+
+.pc-behind {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--pointer-x) var(--pointer-y),
+    var(--behind-glow-color) 0%,
+    transparent var(--behind-glow-size)
+  );
+  filter: blur(58px) saturate(1.02);
+  opacity: calc(0.32 * var(--card-opacity));
+  transition: opacity 200ms ease;
+}
+
+.pc-card-wrapper:hover,
+.pc-card-wrapper.active {
+  --card-opacity: 1;
+}
+
+.pc-card-shell {
+  position: relative;
+  z-index: 1;
+}
+
+.pc-card {
+  height: min(68svh, 550px);
+  display: grid;
+  aspect-ratio: 0.718;
+  border-radius: var(--card-radius);
+  position: relative;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: rgba(0, 0, 0, 0.8) calc((var(--pointer-from-left) * 10px) - 3px)
+    calc((var(--pointer-from-top) * 20px) - 6px) 20px -5px;
+  transform: translateZ(0) rotateX(0deg) rotateY(0deg);
+  transition: transform 1s ease;
+  backface-visibility: hidden;
+}
+
+.pc-card-shell.active .pc-card {
+  transition: none;
+  transform: translateZ(0) rotateX(var(--rotate-y)) rotateY(var(--rotate-x));
+}
+
+.pc-card-shell.entering .pc-card {
+  transition: transform 180ms ease-out;
+}
+
+.pc-card * {
+  display: grid;
+  grid-area: 1 / -1;
+  border-radius: var(--card-radius);
+  pointer-events: none;
+}
+
+.pc-inside {
+  inset: 0;
+  position: absolute;
+  background-image: var(--inner-gradient);
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.pc-shine {
+  --space: 5%;
+  --angle: -45deg;
+  z-index: 3;
+  overflow: hidden;
+  mask-image: var(--icon);
+  mask-mode: luminance;
+  mask-repeat: repeat;
+  mask-size: 150%;
+  mask-position: top calc(200% - (var(--background-y) * 5)) left calc(100% - var(--background-x));
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      var(--sunpillar-1) calc(var(--space) * 1),
+      var(--sunpillar-2) calc(var(--space) * 2),
+      var(--sunpillar-3) calc(var(--space) * 3),
+      var(--sunpillar-4) calc(var(--space) * 4),
+      var(--sunpillar-5) calc(var(--space) * 5),
+      var(--sunpillar-6) calc(var(--space) * 6),
+      var(--sunpillar-1) calc(var(--space) * 7)
+    ),
+    repeating-linear-gradient(
+      var(--angle),
+      #0e152e 0%,
+      hsl(180, 10%, 60%) 3.8%,
+      hsl(180, 29%, 66%) 4.5%,
+      hsl(180, 10%, 60%) 5.2%,
+      #0e152e 10%,
+      #0e152e 12%
+    ),
+    radial-gradient(
+      farthest-corner circle at var(--pointer-x) var(--pointer-y),
+      rgba(0, 0, 0, 0.1) 12%,
+      rgba(0, 0, 0, 0.15) 20%,
+      rgba(0, 0, 0, 0.25) 120%
+    );
+  background-position:
+    0 var(--background-y),
+    var(--background-x) var(--background-y),
+    center;
+  background-blend-mode: color, hard-light;
+  background-size:
+    500% 500%,
+    300% 300%,
+    200% 200%;
+  mix-blend-mode: color-dodge;
+  filter: brightness(0.48) contrast(1.12) saturate(0.25) opacity(0.12);
+  animation: pc-holo-bg 18s linear infinite;
+  transition: filter 0.8s ease;
+}
+
+.pc-shine::before,
+.pc-shine::after {
+  content: '';
+  grid-area: 1 / 1;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.pc-shine::before {
+  background-image:
+    linear-gradient(
+      45deg,
+      var(--sunpillar-4),
+      var(--sunpillar-5),
+      var(--sunpillar-6),
+      var(--sunpillar-1),
+      var(--sunpillar-2),
+      var(--sunpillar-3)
+    ),
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), #b3b3b3 0%, rgba(77, 77, 77, 0.2) 90%),
+    var(--grain);
+  background-size: 250% 250%, 100% 100%, 220px 220px;
+  background-position: var(--pointer-x) var(--pointer-y), center, center;
+  background-blend-mode: color-dodge;
+  mix-blend-mode: luminosity;
+}
+
+.pc-shine::after {
+  background-image: radial-gradient(
+    circle at var(--pointer-x) var(--pointer-y),
+    rgba(255, 255, 255, 0.14),
+    transparent 38%
+  );
+  mix-blend-mode: difference;
+}
+
+.pc-card-shell.active .pc-shine {
+  filter: brightness(0.52) contrast(1.15) saturate(0.28) opacity(0.18);
+  animation-play-state: paused;
+}
+
+.pc-card-shell.active .pc-shine::before,
+.pc-card-shell.active .pc-shine::after {
+  opacity: 0.16;
+}
+
+.pc-glare {
+  z-index: 4;
+  background-image: radial-gradient(
+    farthest-corner circle at var(--pointer-x) var(--pointer-y),
+    rgba(212, 208, 235, 0.15) 10%,
+    rgba(30, 52, 75, 0.08) 68%,
+    transparent 100%
+  );
+  mix-blend-mode: overlay;
+  filter: brightness(0.65) contrast(1.02);
+  opacity: 0.4;
+}
+
+.pc-avatar-content {
+  z-index: 2;
+  overflow: visible;
+  backface-visibility: hidden;
+}
+
+.pc-avatar-content .avatar {
+  width: 100%;
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  border-radius: 0;
+  transform-origin: 50% 100%;
+  transform: translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 6px))
+    scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.02));
+  transition: transform 120ms ease-out;
+  backface-visibility: hidden;
+}
+
+.pc-avatar-content::before {
+  content: '';
+  z-index: 1;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(7, 8, 18, 0.48), transparent 32%, rgba(7, 8, 18, 0.18));
+}
+
+.pc-title-content {
+  z-index: 5;
+  text-align: center;
+  transform: translate3d(
+    calc(var(--pointer-from-left) * -6px + 3px),
+    calc(var(--pointer-from-top) * -6px + 3px),
+    0.1px
+  );
+}
+
+.pc-details {
+  position: absolute;
+  top: 2.25rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pc-details h3 {
+  font-weight: 650;
+  margin: 0;
+  font-size: clamp(1.8rem, 4svh, 2.5rem);
+  background-image: linear-gradient(to bottom, #fff, #b7c8ff);
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.pc-details p {
+  margin: 5px auto 0;
+  color: rgba(240, 244, 255, 0.86);
+  font-size: 0.9rem;
+  font-weight: 550;
+}
+
+.pc-user-info {
+  --ui-inset: 18px;
+  position: absolute;
+  z-index: 6;
+  bottom: var(--ui-inset);
+  left: var(--ui-inset);
+  right: var(--ui-inset);
+  padding: 11px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 17px;
+  background: rgba(10, 12, 24, 0.45);
+  backdrop-filter: blur(20px);
+  pointer-events: auto;
+}
+
+.pc-user-details {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.pc-mini-avatar {
+  width: 39px;
+  height: 39px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.pc-mini-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.pc-user-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.pc-handle {
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.pc-status {
+  color: rgba(217, 226, 248, 0.7);
+  font-size: 0.7rem;
+}
+
+.pc-contact-btn {
+  pointer-events: auto;
+  padding: 9px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.pc-contact-btn:hover {
+  background: rgba(138, 108, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+@keyframes pc-holo-bg {
+  from {
+    background-position: 0 var(--background-y), 0 0, center;
+  }
+  to {
+    background-position: 0 var(--background-y), 90% 90%, center;
+  }
+}
+
+@media (max-width: 768px) {
+  .pc-card {
+    height: min(62svh, 470px);
+  }
+
+  .pc-details {
+    top: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pc-card {
+    height: min(58svh, 420px);
+  }
+
+  .pc-user-info {
+    --ui-inset: 12px;
+    padding: 8px 9px;
+  }
+
+  .pc-mini-avatar {
+    width: 31px;
+    height: 31px;
+  }
+
+  .pc-contact-btn {
+    padding: 7px 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-shine,
+  .pc-card {
+    animation: none;
+    transition: none;
+  }
+}

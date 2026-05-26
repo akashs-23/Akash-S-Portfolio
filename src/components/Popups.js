@@ -1,49 +1,32 @@
 import React, { useState } from 'react';
+import projectsData from '../data/projects';
 
 function Popups({ projects, darkMode }) {
   const [cyclePos, setCyclePos] = useState(0);
+  const [showInstructions, setShowInstructions] = useState(true);
 
   // This will be updated by Scene3D component
   React.useEffect(() => {
-    window.updateCyclePos = (pos) => setCyclePos(pos);
+    const updateCyclePos = (pos) => setCyclePos(pos);
+    const hideExploreInstructions = () => setShowInstructions(false);
+
+    window.updateCyclePos = updateCyclePos;
+    window.hideExploreInstructions = hideExploreInstructions;
+
+    return () => {
+      if (window.updateCyclePos === updateCyclePos) {
+        delete window.updateCyclePos;
+      }
+      if (window.hideExploreInstructions === hideExploreInstructions) {
+        delete window.hideExploreInstructions;
+      }
+    };
   }, []);
 
-  // 5 AI Projects to display in the world
-  const myProjects = [
-    {
-      title: 'Druva – AI Intelligent Dev Companion',
-      subtitle: 'AI assistant for code explanation and productivity.',
-      thumbnail: '/images/druva-thumb.jpg',
-      herobanner: '/images/druva-hero.jpg'
-    },
-    {
-      title: 'SOCA – AI Smart Optimized Code Auditor',
-      subtitle: 'AI-powered code reviews that boost clarity and quality.',
-      thumbnail: '/images/soca-thumb.jpg',
-      herobanner: '/images/soca-hero.jpg'
-    },
-    {
-      title: 'MediBot – AI Medical Diagnosis System',
-      subtitle: 'Smart AI assistant for quick symptom checks and health insights.',
-      thumbnail: '/images/medibot-thumb.jpg',
-      herobanner: '/images/medibot-hero.jpg'
-    },
-    {
-      title: 'Crezia – AI Text-to Image Generator',
-      subtitle: 'Create stunning images instantly from simple text prompts.',
-      thumbnail: '/images/crezia-thumb.jpg',
-      herobanner: '/images/crezia-hero.jpg'
-    },
-    {
-      title: 'Truva – AI Customer Support Copilot',
-      subtitle: 'Adaptive AI chat support that elevates customer experience.',
-      thumbnail: '/images/truva-thumb.jpg',
-      herobanner: '/images/truva-hero.jpg'
-    }
-  ];
+  const myProjects = projectsData;
 
  const popupContent = [
-  { type: 'sign', text: "I build AI experiences that are fast, meaningful, and human-focused." },
+  { type: 'sign', text: "I build AI systems that are fast, useful, and human-focused." },
   { type: 'project', index: 0 },
 
   { type: 'sign', text: "Every project teaches me how to turn ideas into intelligent products." },
@@ -55,10 +38,7 @@ function Popups({ projects, darkMode }) {
   { type: 'sign', text: "Innovation drives me — from design to deployment." },
   { type: 'project', index: 3 },
 
-  { type: 'sign', text: "My goal is simple: build AI that feels powerful, seamless, and useful." },
-  { type: 'project', index: 4 },
-  
-  { type: 'sign', text: "Thanks for exploring my world! Feel free to reach out and connect." }
+  { type: 'connect' }
 ];
 
 
@@ -70,23 +50,43 @@ function Popups({ projects, darkMode }) {
 
   return (
     <>
-      <div className={`sign ${isVisible(0) ? 'visible' : 'hidden'}`} id="instructions">
+      <div className={`sign ${showInstructions ? 'visible' : 'hidden'}`} id="instructions">
         <div id="animation"></div>
-        <div className="helptext"><span className="helptext" style={{ color: darkMode ? '#ffffff' : 'inherit' }}>Drag to explore</span></div>
+        <div className="helptext" style={{ color: darkMode ? '#ffffff' : 'inherit' }}>
+          <span>Drag to explore</span>
+        </div>
       </div>
 
       {popupContent.map((popup, index) => {
         if (popup.type === 'sign') {
           return (
             <div key={index} className={`popup sign ${isVisible(index + 1) ? 'visible' : 'hidden'}`}>
-              <p2 style={{ color: darkMode ? '#ffffff' : 'inherit' }}>
+              <span style={{ color: darkMode ? '#ffffff' : 'inherit' }}>
                 {popup.text}
                 {popup.link && (
                   <a href="https://www.instagram.com/joshua_v_h/" target="_blank" rel="noreferrer" style={{color: '#5c30fd'}}>
                     Instagram
                   </a>
                 )}
-              </p2>
+              </span>
+            </div>
+          );
+        } else if (popup.type === 'connect') {
+          return (
+            <div key={index} className={`popup project ${isVisible(index + 1) ? 'visible' : 'hidden'}`}>
+              <div className="content">
+                <div className="text" style={{ textAlign: 'center' }}>
+                  <h2 className="projecttitle" style={{ color: darkMode ? '#ffffff' : 'inherit' }}>
+                    Thanks for exploring my world!
+                  </h2>
+                  <p className="subtitle" style={{ color: darkMode ? '#ffffff' : 'inherit' }}>
+                    Have an idea? Let's build it.
+                  </p>
+                </div>
+              </div>
+              <a className="button primary" href="/contact">
+                Let's Connect <i className="fa-solid fa-arrow-right"></i>
+              </a>
             </div>
           );
         } else if (popup.type === 'project') {
@@ -103,9 +103,9 @@ function Popups({ projects, darkMode }) {
                   <p className="subtitle" style={{ color: darkMode ? '#ffffff' : 'inherit' }}>{project.subtitle}</p>
                 </div>
               </div>
-              <button className="button primary" onClick={() => window.openModal(popup.index)}>
+              <a className="button primary" href={project.link} target="_blank" rel="noopener noreferrer">
                 View Project <i className="fa-solid fa-arrow-right"></i>
-              </button>
+              </a>
             </div>
           );
         }

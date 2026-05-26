@@ -1,0 +1,46 @@
+.scroll-stack-scroller {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-x: visible;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
+}
+
+.scroll-stack-scroller--external {
+  height: auto;
+  overflow: visible;
+  overscroll-behavior: auto;
+}
+
+.scroll-stack-inner {
+  padding: 20vh 5rem 50rem;
+  min-height: 100vh;
+}
+
+.scroll-stack-scroller--external .scroll-stack-inner {
+  padding: 0 0 clamp(250px, 34vh, 350px);
+  min-height: 0;
+}
+
+.scroll-stack-scroller--reveal .scroll-stack-inner {
+  padding-bottom: 0;
+}
+
+.scroll-stack-card {
+  position: relative;
+  width: 100%;
+  transform-origin: top center;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 1px;
+}
