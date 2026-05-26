@@ -2,6 +2,8 @@
 
 > **[Live →](https://akash-s-portfolio-lco5.vercel.app)**  &nbsp;|&nbsp; AI/ML & Software Engineer
 
+![Akash S World](public/images/world-preview.png)
+
 ---
 
 ## ✨ What makes this different
