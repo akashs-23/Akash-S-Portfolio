@@ -187,7 +187,7 @@ function Contact({ darkMode }) {
               <i className="fas fa-file-alt" aria-hidden="true" /> Want my resume?
             </p>
             <a
-              href="/resume%20section/AKASH%20S%20%5B2025%5D.pdf"
+              href="/resume%20section/Akash%20S%5B2026%5D.pdf"
               download
               className="ct-resume-btn"
             >

@@ -297,7 +297,7 @@ function About() {
           <div className="about-cta-actions">
             <Link to="/contact" className="about-primary">Contact me</Link>
             <a
-              href="/resume%20section/AKASH%20S%20%5B2025%5D.pdf"
+              href="/resume%20section/Akash%20S%5B2026%5D.pdf"
               className="about-secondary"
               download
             >
