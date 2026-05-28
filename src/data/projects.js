@@ -10,6 +10,16 @@ const projects = [
     accent: '#65f28d'
   },
   {
+    title: 'Nexa RAG AI: Document Intelligence',
+    subtitle: 'RAG-powered document search with citations.',
+    description: 'Enterprise document intelligence with RAG, citations, and agent workflows.',
+    detail: 'RAG platform for PDF, DOCX, and TXT ingestion with vector search, confidence scoring, citations, and multi-document AI workflows.',
+    thumbnail: '/images/nexa-rag-logo.svg',
+    tech: ['FastAPI', 'LangGraph', 'ChromaDB', 'PostgreSQL', 'Docker'],
+    link: 'https://github.com/Akash-62/Nexa-RAG-AI',
+    accent: '#55f5ff'
+  },
+  {
     title: 'Druva AI: Streaming Chat Assistant',
     subtitle: 'AI assistant for code explanation and productivity.',
     description: 'Streaming AI assistance for code explanation and productivity.',
@@ -21,7 +31,7 @@ const projects = [
     accent: '#53a6ff'
   },
   {
-    title: 'SOCA – AI Smart Optimized Code Auditor',
+    title: 'SOCA - AI Smart Optimized Code Auditor',
     subtitle: 'AI-powered code reviews that boost clarity and quality.',
     description: 'AI-powered reviews that improve code clarity and quality.',
     detail: 'Automated feedback, debugging guidance, and practical suggestions for developers.',
@@ -30,17 +40,6 @@ const projects = [
     tech: ['React', 'TypeScript', 'Gemini', 'Review AI'],
     link: 'https://soca-ai-driven-code-review-assistan.vercel.app/',
     accent: '#ad7bff'
-  },
-  {
-    title: 'Crezia – AI Text-to-Image Generator',
-    subtitle: 'Create stunning images instantly from simple text prompts.',
-    description: 'Create visual concepts from prompts with generative AI.',
-    detail: 'Text-to-image generation with customizable style and aspect choices.',
-    thumbnail: '/images/crezia_logo.png',
-    herobanner: '/images/crezia-hero.jpg',
-    tech: ['React', 'Gemini', 'Hugging Face', 'Vite'],
-    link: 'https://crezia-ai-text-image-generator.vercel.app/',
-    accent: '#ff62bd'
   }
 ];
 

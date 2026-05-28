@@ -1,86 +1,37 @@
 import React, { useState } from 'react';
+import projectsData from '../data/projects';
 
 function Modals({ projects }) {
   const [openModal, setOpenModal] = useState(null);
 
-  // 5 AI Projects with full details
-  const myProjects = [
-  // 1. DRUVA
-  {
-    title: 'Druva AI: Streaming Chat Assistant',
-    subtitle: 'AI coding assistant that boosts developer productivity.',
-    herobanner: '/images/druva-hero.jpg',
-    link: 'https://druva-ai-developer-assistant.vercel.app/',
+  const myProjects = projectsData.map((project) => ({
+    ...project,
+    herobanner: project.herobanner || project.thumbnail,
     sections: [
-      { _type: 'subheadline', input: 'Developer Frustration' },
-      { _type: 'text-field', input: 'Debugging, explanation, and code clarity take time. Druva simplifies all of it with a clean, fast, voice-enabled AI interface.' },
-      { _type: 'subheadline', input: 'Developer Productivity Reimagined' },
-      { _type: 'text-field', input: 'Built an AI-driven tool that explains code, generates snippets, and answers programming queries through text and voice. Smooth UI enhances the entire experience.' },
-      { _type: 'product-image', url: '/images/druva-hero.jpg' },
+      { _type: 'subheadline', input: 'Overview' },
+      { _type: 'text-field', input: project.detail || project.description || project.subtitle },
       { _type: 'subheadline', input: 'Technologies' },
-      { _type: 'text-field', input: 'React, TypeScript, Vite, Tailwind, Speech-to-Text, AI Models' }
+      { _type: 'text-field', input: project.tech?.join(', ') || 'AI systems, product engineering, and deployment.' }
     ],
-    credits: ['Akash S – AI Engineer']
-  },
-
-  // 2. SOCA
-  {
-    title: 'SOCA – AI Smart Optimized Code Auditor',
-    subtitle: 'AI-powered code reviewer that helps developers write cleaner, smarter code.',
-    herobanner: '/images/soca-hero.jpg',
-    link: 'https://soca-ai-driven-code-review-assistan.vercel.app/',
-    sections: [
-      { _type: 'subheadline', input: 'The Problem' },
-      { _type: 'text-field', input: 'Code reviews are slow and inconsistent. SOCA accelerates the process by analyzing code instantly using AI.' },
-      { _type: 'subheadline', input: 'AI Review Intelligence' },
-      { _type: 'text-field', input: 'Built an AI system that highlights errors, suggests improvements, and provides explanations using LLM-powered analysis. The gamified mode boosts engagement for new developers.' },
-      { _type: 'product-image', url: '/images/soca-hero.jpg' },
-      { _type: 'subheadline', input: 'Technologies' },
-      { _type: 'text-field', input: 'React, TypeScript, Tailwind, Gemini API' }
-    ],
-    credits: ['Akash S – AI Engineer']
-  },
-
-  // 3. CREZIA
-  {
-    title: 'Crezia – AI Text-to-Image Generator',
-    subtitle: 'Transforming words into stunning visuals using generative AI.',
-    herobanner: '/images/crezia-hero.jpg',
-    link: 'https://crezia-ai-text-image-generator.vercel.app/',
-    sections: [
-      { _type: 'subheadline', input: 'The Vision' },
-      { _type: 'text-field', input: 'Crezia reimagines creativity by converting simple text prompts into high-quality AI-generated artwork. It gives users a powerful visual creation tool without needing artistic skills.' },
-      { _type: 'subheadline', input: 'How It Works' },
-      { _type: 'text-field', input: 'Built an efficient text-to-image pipeline using Gemini + HuggingFace models, enabling fast style rendering, aspect control, and creative prompt enhancements.' },
-      { _type: 'product-image', url: '/images/crezia-hero.jpg' },
-      { _type: 'subheadline', input: 'Technologies' },
-      { _type: 'text-field', input: 'React, TypeScript, Vite, Tailwind, Gemini API, HuggingFace' }
-    ],
-    credits: ['Akash S – AI Developer']
-  },
-
-];
-
+    credits: ['Akash S - AI Engineer']
+  }));
 
   React.useEffect(() => {
     window.openModal = (index) => setOpenModal(index);
   }, []);
 
   const closeModal = () => setOpenModal(null);
-
-  // Combine custom projects with Sanity projects
   const allProjects = [...myProjects, ...projects];
 
   return (
     <>
       {allProjects.map((project, index) => {
-        // Handle both custom projects and Sanity projects
-        const headerImage = project.herobanner || 
-          (project.herobanner?.asset ? `https://cdn.sanity.io/images/jidqpryp/production/${project.herobanner.asset._ref.substring(6, project.herobanner.asset._ref.length-4)}.jpg` : '');
-        
+        const headerImage = project.herobanner ||
+          (project.herobanner?.asset ? `https://cdn.sanity.io/images/jidqpryp/production/${project.herobanner.asset._ref.substring(6, project.herobanner.asset._ref.length - 4)}.jpg` : '');
+
         return (
           <div key={index} className={`modal ${openModal === index ? 'show' : ''}`} id={`myModal${index + 1}`}>
-            <div className="header" style={{backgroundImage: `linear-gradient(to bottom, rgba(0,0,0, 0.2), rgba(0,0,0, 1)), url(${headerImage})`}}>
+            <div className="header" style={{ backgroundImage: `linear-gradient(to bottom, rgba(0,0,0, 0.2), rgba(0,0,0, 1)), url(${headerImage})` }}>
               <div className="header-wrapper">
                 <div className="title projectheadline">{project.title}</div>
               </div>
@@ -90,7 +41,7 @@ function Modals({ projects }) {
             </div>
             <div className="modal-content-wrapper">
               <h1 className="modal-subtitle">{project.subtitle}</h1>
-              
+
               {project.link && (
                 <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-live-link">
                   <span className="link-icon">🚀</span>
@@ -98,21 +49,22 @@ function Modals({ projects }) {
                   <span className="link-arrow">→</span>
                 </a>
               )}
-              
+
               {project.sections && project.sections.map((section, sIndex) => {
                 if (section._type === 'subheadline') {
                   return <h1 key={sIndex}>{section.input}</h1>;
-                } else if (section._type === 'text-field') {
+                }
+                if (section._type === 'text-field') {
                   return <p key={sIndex}>{section.input}</p>;
-                } else if (section._type === 'product-image') {
-                  // Handle both URL and Sanity asset reference
-                  const imgUrl = section.url || 
-                    (section.asset ? `https://cdn.sanity.io/images/jidqpryp/production/${section.asset._ref.substring(6, section.asset._ref.length-4)}.jpg` : '');
+                }
+                if (section._type === 'product-image') {
+                  const imgUrl = section.url ||
+                    (section.asset ? `https://cdn.sanity.io/images/jidqpryp/production/${section.asset._ref.substring(6, section.asset._ref.length - 4)}.jpg` : '');
                   return <img key={sIndex} className="project-img" src={imgUrl} alt="" />;
                 }
                 return null;
               })}
-              
+
               {project.credits && project.credits.length > 0 && (
                 <div className="credits">
                   {project.credits.map((credit, cIndex) => (
