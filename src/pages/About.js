@@ -30,6 +30,12 @@ const capabilities = [
 
 const journey = [
   {
+    period: 'Jun 2026 - Present',
+    role: 'AI Engineer',
+    place: 'Rokkun (Client: SupplyWhy.ai)',
+    description: 'Shipping a multi-tenant supply chain intelligence platform with FastAPI, Celery, PostgreSQL, and React, plus LLM pipelines for OEM signals and tariff document intelligence.'
+  },
+  {
     period: 'Sep 2025 - Apr 2026',
     role: 'AI Software Intern',
     place: 'BGS Infotech',
@@ -40,12 +46,6 @@ const journey = [
     role: 'AI Intern',
     place: 'Prime Minds Consultancy',
     description: 'Built an NLP-based extraction workflow that reduced manual effort through LLM automation.'
-  },
-  {
-    period: 'May - Nov 2024',
-    role: 'Project Intern',
-    place: 'Kennametal Inc.',
-    description: 'Developed a computer vision solution for manufacturing quality-control tasks.'
   },
   {
     period: '2021 - 2025',
@@ -194,7 +194,7 @@ function About() {
             />
             <div className="profile-stats">
               <div className="profile-stat">
-                <strong>15+</strong>
+                <strong>4</strong>
                 <span>Featured AI products</span>
               </div>
               <div className="profile-stat">

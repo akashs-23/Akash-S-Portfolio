@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import projectsData from '../data/projects';
 
-function Popups({ projects, darkMode }) {
+function Popups({ darkMode }) {
   const [cyclePos, setCyclePos] = useState(0);
   const [showInstructions, setShowInstructions] = useState(true);
 
@@ -35,7 +35,7 @@ function Popups({ projects, darkMode }) {
   { type: 'sign', text: "I love creating systems that solve problems with clarity and precision." },
   { type: 'project', index: 2 },
 
-  { type: 'sign', text: "Innovation drives me — from design to deployment." },
+  { type: 'sign', text: "Innovation drives me, from design to deployment." },
   { type: 'project', index: 3 },
 
   { type: 'connect' }
@@ -63,11 +63,6 @@ function Popups({ projects, darkMode }) {
             <div key={index} className={`popup sign ${isVisible(index + 1) ? 'visible' : 'hidden'}`}>
               <span style={{ color: darkMode ? '#ffffff' : 'inherit' }}>
                 {popup.text}
-                {popup.link && (
-                  <a href="https://www.instagram.com/joshua_v_h/" target="_blank" rel="noreferrer" style={{color: '#5c30fd'}}>
-                    Instagram
-                  </a>
-                )}
               </span>
             </div>
           );
@@ -90,8 +85,7 @@ function Popups({ projects, darkMode }) {
             </div>
           );
         } else if (popup.type === 'project') {
-          // Use custom projects or fallback to Sanity projects
-          const project = myProjects[popup.index] || (projects[popup.index] || {});
+          const project = myProjects[popup.index] || {};
           const imageUrl = project.thumbnail || '';
           
           return (

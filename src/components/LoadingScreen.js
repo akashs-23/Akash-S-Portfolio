@@ -19,7 +19,7 @@ function LoadingScreen({ progress, onStart, showButton }) {
       <div id="loader-wrapper">
         <div className="title">Welcome to my world!</div>
         <h1 style={{textAlign: 'right'}}>
-          <span>I'm Akash — AI/ML &amp; Software Engineer. I build LLM systems, RAG pipelines &amp; agentic products that actually work.</span>
+          <span>I'm Akash, AI/ML &amp; Software Engineer. I build LLM systems, RAG pipelines &amp; agentic products that actually work.</span>
         </h1>
         <button
           className={`button cta ${buttonReady ? 'cta-ready' : 'cta-loading'}`}
