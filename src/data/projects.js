@@ -25,7 +25,6 @@ const projects = [
     description: 'Streaming AI assistance for code explanation and productivity.',
     detail: 'A fast conversational development assistant designed around clear answers and smooth interactions.',
     thumbnail: '/images/druva-logo.png',
-    herobanner: '/images/druva-hero.jpg',
     tech: ['React', 'TypeScript', 'LLM', 'Speech'],
     link: 'https://druva-ai-developer-assistant.vercel.app/',
     accent: '#53a6ff'
@@ -36,7 +35,6 @@ const projects = [
     description: 'AI-powered reviews that improve code clarity and quality.',
     detail: 'Automated feedback, debugging guidance, and practical suggestions for developers.',
     thumbnail: '/images/soca_logo.png',
-    herobanner: '/images/soca-hero.jpg',
     tech: ['React', 'TypeScript', 'Gemini', 'Review AI'],
     link: 'https://soca-ai-driven-code-review-assistan.vercel.app/',
     accent: '#ad7bff'

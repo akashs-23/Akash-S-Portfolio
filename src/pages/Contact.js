@@ -86,7 +86,7 @@ function Contact({ darkMode }) {
               iconBg: 'linear-gradient(135deg,#25d366,#128c7e)',
               icon: 'fab fa-whatsapp',
               label: 'Chat on WhatsApp',
-              sub: 'Quick & Easy — Let\'s Talk!',
+              sub: 'Quick & Easy, Let\'s Talk!',
               accent: '#25d366',
               onClick: openWhatsApp,
               as: 'button'

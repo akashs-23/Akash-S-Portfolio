@@ -193,9 +193,17 @@ function FlowersAndTrees() {
     if (blossomRef.current.instanceColor) blossomRef.current.instanceColor.needsUpdate = true;
     if (stemRef.current.instanceColor) stemRef.current.instanceColor.needsUpdate = true;
 
+    // Keep the stage + audience area clear of trees so nothing overlaps them.
+    const inStageZone = (x, z) => x > -9 && x < -2.5 && z > 1 && z < 8;
+
     // Position 80 trees
     for (let i = 0; i < 80; i++) {
       sampler.sample(tempPosition);
+      let tries = 0;
+      while (inStageZone(tempPosition.x, tempPosition.z) && tries < 30) {
+        sampler.sample(tempPosition);
+        tries++;
+      }
       dummy.position.set(tempPosition.x, tempPosition.y, tempPosition.z);
       dummy.rotation.set(Math.PI / 2, 0, Math.random() * Math.PI);
       const scale = Math.random() * 0.05 + 0.04;
@@ -242,23 +250,28 @@ function FlowersAndTrees() {
 
 // Random people
 function RandomPeople() {
-  // Fixed static positions - people facing the stage at [6, 0, -7]
-  // Positioned on the left side, facing right/forward toward the stage
+  // Audience standing in front of the stage (stage platform ~x[-7.9,-5.4] z[2.2,4.9]),
+  // arranged in two tidy rows on the +x side, all facing back toward the stage (-x).
+  // Stage backdrop sits at the back (z~2.5-4.1) and the structure (truss + speakers)
+  // reaches z~5.8, so the crowd stands beyond that (z>=6.2) facing the stage (-z).
+  const FACE_STAGE = Math.PI; // man.glb faces -z (toward the stage)
+  // Tight 2x4 audience block, centred on the stage centre (x=-6.65), close to the stage
+  // (just clear of the structure at z~5.8), all facing the stage (-z).
   const people = [
-    { key: 0, position: [-8.5, -0.01, -3.0], rotation: [0, -0.5, 0], shirtColor: 0xFA6D6D, skinColor: 0x8d5524 },
-    { key: 1, position: [-7.0, -0.01, -2.5], rotation: [0, -0.3, 0], shirtColor: 0xffffff, skinColor: 0xc68642 },
-    { key: 2, position: [-9.0, -0.01, -4.0], rotation: [0, -0.6, 0], shirtColor: 0xFA6D6D, skinColor: 0xe0ac69 },
-    { key: 3, position: [-6.5, -0.01, -3.5], rotation: [0, -0.2, 0], shirtColor: 0xffffff, skinColor: 0xf1c27d },
-    { key: 4, position: [-8.0, -0.01, -5.0], rotation: [0, -0.4, 0], shirtColor: 0xFA6D6D, skinColor: 0xffdbac },
-    { key: 5, position: [-7.5, -0.01, -4.5], rotation: [0, -0.35, 0], shirtColor: 0xffffff, skinColor: 0x8d5524 },
-    { key: 6, position: [-9.2, -0.01, -2.8], rotation: [0, -0.55, 0], shirtColor: 0xFA6D6D, skinColor: 0xc68642 },
-    { key: 7, position: [-6.8, -0.01, -5.2], rotation: [0, -0.25, 0], shirtColor: 0xffffff, skinColor: 0xe0ac69 }
+    { key: 0, position: [-5.6, -0.01, 6.1], rotation: [0, FACE_STAGE, 0], shirtColor: 0xFA6D6D, skinColor: 0x8d5524 },
+    { key: 1, position: [-6.3, -0.01, 6.1], rotation: [0, FACE_STAGE, 0], shirtColor: 0xffffff, skinColor: 0xc68642 },
+    { key: 2, position: [-7.0, -0.01, 6.1], rotation: [0, FACE_STAGE, 0], shirtColor: 0xFA6D6D, skinColor: 0xe0ac69 },
+    { key: 3, position: [-7.7, -0.01, 6.1], rotation: [0, FACE_STAGE, 0], shirtColor: 0xffffff, skinColor: 0xf1c27d },
+    { key: 4, position: [-5.6, -0.01, 6.8], rotation: [0, FACE_STAGE, 0], shirtColor: 0xFA6D6D, skinColor: 0xffdbac },
+    { key: 5, position: [-6.3, -0.01, 6.8], rotation: [0, FACE_STAGE, 0], shirtColor: 0xffffff, skinColor: 0x8d5524 },
+    { key: 6, position: [-7.0, -0.01, 6.8], rotation: [0, FACE_STAGE, 0], shirtColor: 0xFA6D6D, skinColor: 0xc68642 },
+    { key: 7, position: [-7.7, -0.01, 6.8], rotation: [0, FACE_STAGE, 0], shirtColor: 0xffffff, skinColor: 0xe0ac69 }
   ];
 
   return (
     <>
-      {people.map(person => (
-        <Person key={person.key} {...person} />
+      {people.map(({ key, ...person }) => (
+        <Person key={key} {...person} />
       ))}
     </>
   );
@@ -514,7 +527,7 @@ function Scene3D({ darkMode, started, setLoadingProgress }) {
         <AnimatedModel path="/models/robo.glb" scale={[0.5, 0.5, 0.5]} position={[0, 0, -9.5]} rotation={[0, -Math.PI, 0]} animationIndex={14} />
         
         {/* Anime Characters - smaller and positioned forward */}
-        <AnimatedModel path="/models/shin-chan_and_shiro.glb" scale={[0.2, 0.2, 0.2]} position={[-8, 0, 4]} rotation={[0, Math.PI/3, 0]} />
+        <AnimatedModel path="/models/shin-chan_and_shiro.glb" scale={[0.2, 0.2, 0.2]} position={[-6.65, 0.54, 4.3]} rotation={[0, Math.PI, 0]} />
         <AnimatedModel path="/models/suraj-doremon.glb" scale={[0.30, 0.30, 0.30]} position={[8, 0, 7]} rotation={[0, -Math.PI/4, 0]} />
         
         <FlowersAndTrees />
