@@ -32,7 +32,7 @@ const journey = [
   {
     period: 'Jun 2026 - Present',
     role: 'AI Engineer',
-    place: 'Rokkun (Client: SupplyWhy.ai)',
+    place: 'Rokkun',
     description: 'Shipping a multi-tenant supply chain intelligence platform with FastAPI, Celery, PostgreSQL, and React, plus LLM pipelines for OEM signals and tariff document intelligence.'
   },
   {

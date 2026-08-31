@@ -400,20 +400,20 @@
   border-radius: 27px;
   background:
     radial-gradient(circle at 93% 6%, rgba(138, 108, 255, 0.12), transparent 34%),
-    rgba(13, 17, 34, 0.97);
+    #0d1122;
   box-shadow: 0 20px 42px rgba(2, 4, 13, 0.28);
 }
 
 .capability-card:nth-child(2) {
   background:
     radial-gradient(circle at 93% 6%, rgba(66, 215, 255, 0.1), transparent 35%),
-    rgba(13, 17, 34, 0.98);
+    #0d1122;
 }
 
 .capability-card:nth-child(3) {
   background:
     radial-gradient(circle at 93% 6%, rgba(138, 108, 255, 0.18), transparent 38%),
-    rgba(13, 17, 34, 0.99);
+    #0d1122;
 }
 
 .capability-card > span {

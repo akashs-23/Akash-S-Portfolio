@@ -5,6 +5,20 @@ import * as THREE from 'three';
 import * as TWEEN from '@tweenjs/tween.js';
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
 
+const STAGE_CENTER = new THREE.Vector2(-6.85, 3.69);
+const STAGE_FRONT = new THREE.Vector2(-0.829, 0.56);
+const STAGE_RIGHT = new THREE.Vector2(0.56, 0.829);
+const STAGE_TREES = [
+  [-9.4, 0.3, 0.07],
+  [-9, 1.5, 0.055],
+  [-6.6, 6.6, 0.065],
+  [-6, 6.75, 0.055],
+  [-4.8, 7.2, 0.06],
+  [-3.8, 5.9, 0.075],
+  [-3.6, 3.5, 0.055],
+  [-4.5, 1.5, 0.065]
+];
+
 // Car component
 function Car() {
   const { scene } = useGLTF('/models/scooter.glb');
@@ -193,20 +207,35 @@ function FlowersAndTrees() {
     if (blossomRef.current.instanceColor) blossomRef.current.instanceColor.needsUpdate = true;
     if (stemRef.current.instanceColor) stemRef.current.instanceColor.needsUpdate = true;
 
-    // Keep the stage + audience area clear of trees so nothing overlaps them.
-    const inStageZone = (x, z) => x > -9 && x < -2.5 && z > 1 && z < 8;
+    // Keep only the rotated stage and audience footprint clear.
+    const inStageZone = (x, z) => {
+      const dx = x - STAGE_CENTER.x;
+      const dz = z - STAGE_CENTER.y;
+      const acrossStage = dx * STAGE_RIGHT.x + dz * STAGE_RIGHT.y;
+      const inFrontOfStage = dx * STAGE_FRONT.x + dz * STAGE_FRONT.y;
+      return Math.abs(acrossStage) < 2.35 && inFrontOfStage > -1.5 && inFrontOfStage < 4.4;
+    };
+    const inCyclistLane = (x, z) => {
+      const distanceFromCenter = Math.hypot(x, z);
+      return distanceFromCenter > 9.75 && distanceFromCenter < 13;
+    };
 
     // Position 80 trees
     for (let i = 0; i < 80; i++) {
-      sampler.sample(tempPosition);
-      let tries = 0;
-      while (inStageZone(tempPosition.x, tempPosition.z) && tries < 30) {
+      const fixedTree = STAGE_TREES[i];
+      if (fixedTree) {
+        tempPosition.set(fixedTree[0], 0, fixedTree[1]);
+      } else {
         sampler.sample(tempPosition);
-        tries++;
+        let tries = 0;
+        while ((inStageZone(tempPosition.x, tempPosition.z) || inCyclistLane(tempPosition.x, tempPosition.z)) && tries < 30) {
+          sampler.sample(tempPosition);
+          tries++;
+        }
       }
       dummy.position.set(tempPosition.x, tempPosition.y, tempPosition.z);
-      dummy.rotation.set(Math.PI / 2, 0, Math.random() * Math.PI);
-      const scale = Math.random() * 0.05 + 0.04;
+      dummy.rotation.set(Math.PI / 2, 0, fixedTree ? i * 0.73 : Math.random() * Math.PI);
+      const scale = fixedTree ? fixedTree[2] : Math.random() * 0.05 + 0.04;
       dummy.scale.set(scale, scale, scale);
       dummy.updateMatrix();
       
@@ -250,23 +279,38 @@ function FlowersAndTrees() {
 
 // Random people
 function RandomPeople() {
-  // Audience standing in front of the stage (stage platform ~x[-7.9,-5.4] z[2.2,4.9]),
-  // arranged in two tidy rows on the +x side, all facing back toward the stage (-x).
-  // Stage backdrop sits at the back (z~2.5-4.1) and the structure (truss + speakers)
-  // reaches z~5.8, so the crowd stands beyond that (z>=6.2) facing the stage (-z).
-  const FACE_STAGE = Math.PI; // man.glb faces -z (toward the stage)
-  // Tight 2x4 audience block, centred on the stage centre (x=-6.65), close to the stage
-  // (just clear of the structure at z~5.8), all facing the stage (-z).
-  const people = [
-    { key: 0, position: [-5.6, -0.01, 6.1], rotation: [0, FACE_STAGE, 0], shirtColor: 0xFA6D6D, skinColor: 0x8d5524 },
-    { key: 1, position: [-6.3, -0.01, 6.1], rotation: [0, FACE_STAGE, 0], shirtColor: 0xffffff, skinColor: 0xc68642 },
-    { key: 2, position: [-7.0, -0.01, 6.1], rotation: [0, FACE_STAGE, 0], shirtColor: 0xFA6D6D, skinColor: 0xe0ac69 },
-    { key: 3, position: [-7.7, -0.01, 6.1], rotation: [0, FACE_STAGE, 0], shirtColor: 0xffffff, skinColor: 0xf1c27d },
-    { key: 4, position: [-5.6, -0.01, 6.8], rotation: [0, FACE_STAGE, 0], shirtColor: 0xFA6D6D, skinColor: 0xffdbac },
-    { key: 5, position: [-6.3, -0.01, 6.8], rotation: [0, FACE_STAGE, 0], shirtColor: 0xffffff, skinColor: 0x8d5524 },
-    { key: 6, position: [-7.0, -0.01, 6.8], rotation: [0, FACE_STAGE, 0], shirtColor: 0xFA6D6D, skinColor: 0xc68642 },
-    { key: 7, position: [-7.7, -0.01, 6.8], rotation: [0, FACE_STAGE, 0], shirtColor: 0xffffff, skinColor: 0xe0ac69 }
+  const faceStage = Math.atan2(-STAGE_FRONT.x, -STAGE_FRONT.y);
+  const crowdLayout = [
+    { distance: 1.1, offset: -1.48, turn: -0.08, scale: 0.46 },
+    { distance: 1.06, offset: -0.46, turn: 0.1, scale: 0.51 },
+    { distance: 1.14, offset: 0.57, turn: -0.05, scale: 0.47 },
+    { distance: 1.08, offset: 1.5, turn: 0.07, scale: 0.5 },
+    { distance: 1.5, offset: -1.65, turn: 0.12, scale: 0.49 },
+    { distance: 1.56, offset: -0.84, turn: -0.14, scale: 0.44 },
+    { distance: 1.47, offset: 0.02, turn: 0.04, scale: 0.52 },
+    { distance: 1.58, offset: 0.86, turn: 0.13, scale: 0.46 },
+    { distance: 1.49, offset: 1.64, turn: -0.1, scale: 0.5 },
+    { distance: 1.92, offset: -1.38, turn: -0.12, scale: 0.48 },
+    { distance: 1.86, offset: -0.44, turn: 0.15, scale: 0.53 },
+    { distance: 1.95, offset: 0.5, turn: -0.06, scale: 0.45 },
+    { distance: 1.88, offset: 1.4, turn: 0.09, scale: 0.49 }
   ];
+  const shirtColors = [0xe85d4a, 0xf2c14e, 0x2a9d8f, 0xf4f1de, 0x5c6ac4, 0xe76f51, 0x6a994e];
+  const pantsColors = [0x243b53, 0x5b3a29, 0x2f4858, 0x393e46, 0x6b705c];
+  const skinColors = [0x8d5524, 0xc68642, 0xe0ac69, 0xf1c27d, 0xffdbac];
+  const people = crowdLayout.map(({ distance, offset, turn, scale }, index) => ({
+      key: index,
+      position: [
+        STAGE_CENTER.x + STAGE_FRONT.x * distance + STAGE_RIGHT.x * offset,
+        -0.01,
+        STAGE_CENTER.y + STAGE_FRONT.y * distance + STAGE_RIGHT.y * offset
+      ],
+      rotation: [0, faceStage + turn, 0],
+      scale,
+      shirtColor: shirtColors[index % shirtColors.length],
+      pantsColor: pantsColors[(index * 2) % pantsColors.length],
+      skinColor: skinColors[(index * 3) % skinColors.length]
+    }));
 
   return (
     <>
@@ -277,7 +321,7 @@ function RandomPeople() {
   );
 }
 
-const Person = React.memo(function Person({ position, rotation, shirtColor, skinColor }) {
+const Person = React.memo(function Person({ position, rotation, scale, shirtColor, pantsColor, skinColor }) {
   const { scene } = useGLTF('/models/man.glb');
   const clonedScene = React.useMemo(() => scene.clone(), [scene]);
 
@@ -299,6 +343,16 @@ const Person = React.memo(function Person({ position, rotation, shirtColor, skin
       });
     }
 
+    const pants = clonedScene.getObjectByName('pants');
+    if (pants) {
+      pants.traverse((node) => {
+        if (node.isMesh) {
+          node.material = node.material.clone();
+          node.material.color.set(new THREE.Color(pantsColor));
+        }
+      });
+    }
+
     const body = clonedScene.getObjectByName('body');
     if (body) {
       body.traverse((node) => {
@@ -308,9 +362,9 @@ const Person = React.memo(function Person({ position, rotation, shirtColor, skin
         }
       });
     }
-  }, [clonedScene, shirtColor, skinColor]);
+  }, [clonedScene, shirtColor, pantsColor, skinColor]);
 
-  return <primitive object={clonedScene} scale={[0.49, 0.49, 0.49]} position={position} rotation={rotation} />;
+  return <primitive object={clonedScene} scale={[scale, scale, scale]} position={position} rotation={rotation} />;
 });
 
 // Scene Controller
@@ -527,8 +581,13 @@ function Scene3D({ darkMode, started, setLoadingProgress }) {
         <AnimatedModel path="/models/robo.glb" scale={[0.5, 0.5, 0.5]} position={[0, 0, -9.5]} rotation={[0, -Math.PI, 0]} animationIndex={14} />
         
         {/* Anime Characters - smaller and positioned forward */}
-        <AnimatedModel path="/models/shin-chan_and_shiro.glb" scale={[0.2, 0.2, 0.2]} position={[-6.65, 0.54, 4.3]} rotation={[0, Math.PI, 0]} />
-        <AnimatedModel path="/models/suraj-doremon.glb" scale={[0.30, 0.30, 0.30]} position={[8, 0, 7]} rotation={[0, -Math.PI/4, 0]} />
+        <AnimatedModel
+          path="/models/shin-chan_and_shiro.glb"
+          scale={[0.2, 0.2, 0.2]}
+          position={[STAGE_CENTER.x + STAGE_FRONT.x * 0.18, 0.54, STAGE_CENTER.y + STAGE_FRONT.y * 0.18]}
+          rotation={[0, Math.atan2(STAGE_RIGHT.x, STAGE_RIGHT.y), 0]}
+        />
+        <AnimatedModel path="/models/suraj-doremon.glb" scale={[0.30, 0.30, 0.30]} position={[8, 0, 7]} rotation={[0, Math.atan2(8, 7), 0]} />
         
         <FlowersAndTrees />
         <RandomPeople />
